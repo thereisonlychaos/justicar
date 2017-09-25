@@ -1,0 +1,13 @@
+{
+	"environment": "production",
+	"irc": {
+		"server": "irc.sanguinus.org",
+		"nick": "Justicar",
+		"settings": {
+			"port": 6667,
+			"debug": false,
+			"autoConnect": true,
+			"retryCount": 100
+		}
+	}
+}

@@ -1,0 +1,26 @@
+
+    --[ Justicar VtM Bot ]--
+     Made for Sanguinus.org
+
+         _.mmmmmmmmm._
+       dMMMY'~~~~~`YMMMb
+     dMMMY'         `YMMMb
+    dMMMY'           `YMMMb
+    CMMM(             )MMMD
+    YMMMb.           .dMMMY
+     YMMMb.         .dMMMY
+      `YMMMboo...oodMMMY'
+    .    `"#MMMMMMM#"'    .
+    Mb       `MMM'       dM
+    MMMM.   .dMMMb.   .dMMM
+    MMMMMMMMMMMMMMMMMMMMMMM
+    MMMMMMMMMMMMMMMMMMMMMMM
+    MMMM'   `YMMMY'   `YMMM
+    MM'      )MMM(      `MM
+    '       .MMMMM.       `
+            dMMMMMb
+           dMMMMMMMb
+            """""""
+
+          by Matt Webb
+          

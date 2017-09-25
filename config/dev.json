@@ -1,0 +1,14 @@
+{
+	"environment": "development",
+	"irc": {
+		"server": "127.0.0.1",
+		"nick": "Justicar",
+		"settings": {
+			"port": 6667,
+			"debug": false,
+			"autoConnect": true,
+			"retryCount": 100,
+			"channels": ["#test"]
+		}
+	}
+}
