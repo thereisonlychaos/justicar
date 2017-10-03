@@ -84,6 +84,7 @@ if (config.irc && config.irc.server && config.irc.nick) {
 	process.exit();
 }
 
+ircInterface.init(ircClient, null);// @TODO add schemas here
 
 ircClient.addListener('connect', function() {
 	console.log("\n", chalk.bold.green(">>> Justicar has connected <<<"), "\n");
@@ -94,6 +95,6 @@ ircClient.addListener('connect', function() {
 ircClient.addListener('message', function(from, to, message) {
 	console.log(from, ' => ', to, ' : ', message);
 	if (ircInterface.isCommand(message)) {
-		ircInterface.handleCommandMessage(message);
+		ircInterface.handleCommandMessage(from, to, message);
 	}
 })
