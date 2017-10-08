@@ -6,7 +6,8 @@ var dice = require("./dice");
 */
 function commandRoll(nick, channel, numberOfDice, difficulty) {
 	let messageTarget = channel[0] === "#" ? channel : nick;
-	this.irc.say(messageTarget, nick + " rolled " + numberOfDice + "in " + channel + " @ diff " + difficulty);
+
+	this.replier.replyToCommand(nick, channel, nick + " rolled " + numberOfDice + " in " + channel + " @ diff " + difficulty);
 }
 
 module.exports.commands = {

@@ -11,14 +11,14 @@ commandHandlers["Dice"] = require('./commandsDice');
 
 var commandEnv = {
 	schemas: null,
-	irc: null
+	replier: null
 };
 
 var commandDictionary = {};
 
-module.exports.init = function(irc, schemas) {
+module.exports.init = function(replier, schemas) {
 	console.log(chalk.blue("Initializing commands"));
-	commandEnv.irc = irc;
+	commandEnv.replier = replier;
 	commandEnv.schemas = schemas;
 
 	for (var key in commandHandlers) {

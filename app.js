@@ -38,6 +38,7 @@ var app = express();
 
 // local modules
 var ircInterface = require('./local_modules/ircInterface')
+var replier = require('./local_modules/replier')(irc);
 
 
 // view engine setup
@@ -79,12 +80,13 @@ module.exports = app;
 if (config.irc && config.irc.server && config.irc.nick) {
 	console.log("Attempting IRC connection to", config.irc.server, "with nick", config.irc.nick);
 	var ircClient = new irc.Client(config.irc.server, config.irc.nick, config.irc.settings || {});
+	var replier = require('./local_modules/replier')(ircClient);
+
+	ircInterface.init(replier, null);// @TODO add schemas here
 } else {
 	console.error(chalk.red("!!!Invalid IRC configuration!!!"));
 	process.exit();
 }
-
-ircInterface.init(ircClient, null);// @TODO add schemas here
 
 ircClient.addListener('connect', function() {
 	console.log("\n", chalk.bold.green(">>> Justicar has connected <<<"), "\n");
