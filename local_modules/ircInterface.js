@@ -6,23 +6,24 @@ var chalk = require('chalk');
 var commandHandlers = {};
 commandHandlers["Dice"] = require('./commandsDice');
 
-
-// using the apply() method, you can use the commandEnv as the 'this' value, allowing any command to reference that database connection involved
-
-var commandEnv = {
-	schemas: null,
-	replier: null
-};
+var replier = null;
+var schemas = null;
 
 var commandDictionary = {};
 
-module.exports.init = function(replier, schemas) {
+module.exports.init = function(r, s) {
 	console.log(chalk.blue("Initializing commands"));
-	commandEnv.replier = replier;
-	commandEnv.schemas = schemas;
+	replier = r;
+	schemas = s;
 
 	for (var key in commandHandlers) {
 		// does the command handler have a proper command object? If not, warning.
+		if (!commandHandlers[key].init) {
+			console.log(chalk.yellow("WARNING:"), "Command Handler", key, "does not init function defined. Will not have replier or schemas set properly.")
+		} else {
+			commandHandlers[key].init(replier, schemas);
+		}
+
 		if (!commandHandlers[key].commands) {
 			console.log(chalk.yellow("WARNING:"), "Command Handler", key, "does not have a command object defined. It will not create any bot commands.")
 		} else {
@@ -65,7 +66,7 @@ module.exports.handleCommandMessage = function(from, to, message) {
 	console.log("Args:", args);
 
 	if (commandDictionary.hasOwnProperty(command)) {
-		commandDictionary[command].apply(commandEnv, [from, to].concat(args));
+		commandDictionary[command].apply({}, [from, to].concat(args));
 	}
 }
 
