@@ -1,4 +1,36 @@
-var randomJs = require('random-js')();
+const randomJs = require('random-js');
+
+/**
+* Initialize Mersenne Twister Engine
+*/
+const engine = randomJs.engines.mt19937();
+engine.autoSeed();
+
+/**
+* Max number of times that the same seed will be used
+*/
+const maxSeedUse = 100;
+
+/**
+* Sets the entropy seed
+*/
+module.exports.resetSeed = function() {
+	engine.autoSeed();
+}
+
+/**
+* Sets a new autoseed if the number of uses so far exceeds maxSeedUse
+* @return {Boolean} whether or not the seed was reset
+*/
+function ensureFreshSeed() {
+	if (engine.getUseCount() >= maxSeedUse) {
+		console.log('resetting seed since use count is', engine.getUseCount())
+		engine.autoSeed();
+		return true;
+	} else {
+		return false;
+	}
+}
 
 /**
 * Rolls Vampire 20th Edition Style Dice Pool
@@ -10,7 +42,7 @@ module.exports.rollV20 = function(numberOfDice, difficulty) {
 	console.log("v20 Roll,", numberOfDice, "dice @ diff", difficulty);
 	// generate values to be returned
 	let result = {
-		rolls: randomJs.dice(10, numberOfDice),
+		rolls: randomJs.dice(10, numberOfDice)(engine),
 		successes: 0,
 		botch: false
 	}
@@ -34,6 +66,8 @@ module.exports.rollV20 = function(numberOfDice, difficulty) {
 	} else {
 		result.successes = rawSuccesses - ones;
 	}
+
+	ensureFreshSeed();
 
 	return result;
 }
