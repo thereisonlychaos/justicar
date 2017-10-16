@@ -10,5 +10,8 @@
 			"retryCount": 100,
 			"channels": ["#test"]
 		}
+	},
+	"chat": {
+		"staffChannel": "#test"
 	}
 }

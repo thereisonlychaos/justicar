@@ -3,7 +3,6 @@ require('dotenv').config();
 // includes
 var fs = require('fs');
 var chalk = require('chalk');
-var stringArgv = require('string-argv');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -38,8 +37,6 @@ var app = express();
 
 // local modules
 var ircInterface = require('./local_modules/ircInterface')
-var replier = require('./local_modules/replier')(irc);
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -80,9 +77,8 @@ module.exports = app;
 if (config.irc && config.irc.server && config.irc.nick) {
 	console.log("Attempting IRC connection to", config.irc.server, "with nick", config.irc.nick);
 	var ircClient = new irc.Client(config.irc.server, config.irc.nick, config.irc.settings || {});
-	var replier = require('./local_modules/replier')(ircClient);
 
-	ircInterface.init(replier, null);// @TODO add schemas here
+	ircInterface.init(ircClient, null, config);// @TODO add schemas here
 } else {
 	console.error(chalk.red("!!!Invalid IRC configuration!!!"));
 	process.exit();

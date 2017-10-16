@@ -1,27 +1,32 @@
-var stringArgv = require('string-argv');
-var chalk = require('chalk');
+const chalk = require('chalk');
+const botOutput = require('./botOutput');
 
 // modules
 
-var commandHandlers = {};
+let commandHandlers = {};
 commandHandlers["Dice"] = require('./commandsDice');
 
-var replier = null;
+var client = null;
 var schemas = null;
+var botOut = null;
+var config = {};
 
 var commandDictionary = {};
 
-module.exports.init = function(r, s) {
+module.exports.init = function(c, s, newConfig) {
 	console.log(chalk.blue("Initializing commands"));
-	replier = r;
+	config = newConfig;
+	client = c;
 	schemas = s;
+	botOut = new botOutput(client, config.chat.staffChannel);
+
 
 	for (var key in commandHandlers) {
 		// does the command handler have a proper command object? If not, warning.
 		if (!commandHandlers[key].init) {
 			console.log(chalk.yellow("WARNING:"), "Command Handler", key, "does not init function defined. Will not have replier or schemas set properly.")
 		} else {
-			commandHandlers[key].init(replier, schemas);
+			commandHandlers[key].init(schemas);
 		}
 
 		if (!commandHandlers[key].commands) {
@@ -30,20 +35,19 @@ module.exports.init = function(r, s) {
 			// load command into dictionary
 			let handler = commandHandlers[key];
 			for (var command in handler.commands) {
-				if (command[0] !== "!") {
-					console.log(chalk.yellow("WARNING:"), "Command Handler", key, "has invalid command", command, " - All commands must start with !");
-				} else if (commandDictionary[command]) {
+				let commandName = command.commandName;
+				if (commandDictionary[commandName]) {
 					console.warn("Command", command, "is already defined.")
 				} else {					
-					console.log(command, "command created");
-					commandDictionary[command] = handler.commands[command];
+					console.log(commandName, "command created");
+					commandDictionary[commandName] = command;
 				}
 			}
 		}
 	}
 }
 
-module.exports.isCommand = function(strMessage) {
+module.exports.isCommandMessage = function(strMessage) {
 	if (typeof strMessage === 'string') {
 		if(strMessage.slice(0,1) === "!") {
 			return true;
@@ -51,22 +55,22 @@ module.exports.isCommand = function(strMessage) {
 			return false;
 		}
 	} else {
-		console.log("Non-string message passed into isCommand", strMessage);
+		console.log("Non-string message passed into isCommand:", strMessage);
 		return false;
 	}
 }
 
 module.exports.handleCommandMessage = function(from, to, message) {
-	let args = stringArgv(message);
+	let command = message.split(" ", 1)[0];
+	let messageAfterCommand = message.substring(command.length + 1)
+
 	console.log("Command message received:", message);
 
-	let command = args[0];
-	args.splice(0, 1);
 	console.log("Command:", command);
-	console.log("Args:", args);
+	console.log("Parameters:", messageAfterCommand);
 
-	if (commandDictionary.hasOwnProperty(command)) {
-		commandDictionary[command].apply({}, [from, to].concat(args));
+	if (commandDictionary.hasOwnProperty(command) && IsCommandValid(commandDictionary[command].params, from, to, args)) {
+		commandDictionary[command].func.apply({}, [from, to].concat(args));
 	}
 }
 

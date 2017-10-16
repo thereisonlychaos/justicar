@@ -1,55 +1,28 @@
-var irc = require('irc');
-var ircColors = require('irc-colors');
-var dice = require("./dice");
+const irc = require('irc');
+const ircColors = require('irc-colors');
+const dice = require("./dice");
 
-var colorScheme = require('./colorscheme')
+const colorScheme = require('./colorscheme')
+const Command = require('./classes/Command');
+const MessageStack = require('./classes/MessageStack');
 
-var replier = null;
-var schemas = null;
+let replier = null;
+let schemas = null;
 
-module.exports.init = function(r, s) {
-	replier = r;
+/**
+* Initializes the schemas and IRC replier
+* @param {object} schemas - the schemas object from Mongoose used to access the database
+*/
+module.exports.init = function(s) {
 	schemas = s;
 }
 
 /**
-* Rolls dice and returns an IRC string to output
-* @param (String) nick - the nick that sent the command
-* @param (String) channel - the channel or PM where the command was received
-* @param (String) numberOfDice - number of dice rolled
-* @param (String) difficulty - difficulty of roll
+* This array stores command. All commands modules must have this to be processed by ircinterface.js
 */
-function commandRoll(nick, channel, numberOfDice, difficulty) {
-	if (isNaN(numberOfDice) || isNaN(difficulty)) {
-		replier.replyToCommand(nick, channel, irc.colors.wrap(colorScheme.botError, "Invalid parameters. Format is !roll (number of dice) (difficulty). Ex: !roll 3 5"));
-	} else {
-		let d = parseFloat(numberOfDice);
-		let diff = parseFloat(difficulty);
+module.exports.commands = [];
 
-		if (d <= 0 || diff <= 0 || d > 20 || diff > 10) {
-			replier.replyToCommand(nick, channel, irc.colors.wrap(colorScheme.botError, "Invalid parameters. Dice pool must be between 1 and 20, and difficulty between 1 and 10."));
 
-		} else {
-			let result = dice.rollV20(d, diff);
-
-			let replyString = ircColors.bold(irc.colors.wrap(colorScheme.botReply, nick + " rolled " + numberOfDice + " @ diff " + difficulty + " :")) + irc.colors.wrap("reset", " ");
-
-			replyString += getColoredDicePool(result.rolls, diff) + " ";
-
-			if (result.botch) {
-				replyString += ircColors.bold(irc.colors.wrap(colorScheme.messageBotch, "(BOTCH!)"));
-			} else if (result.successes > 0) {
-				replyString += ircColors.bold(irc.colors.wrap(colorScheme.messageSuccess, "(" + result.successes + " successes)"));
-			} else {
-				replyString += ircColors.bold(irc.colors.wrap(colorScheme.messageFailure, "(Failed)"));
-			}
-
-			replier.replyToCommand(nick, channel, replyString);		
-		}
-		
-
-	}
-}
 
 /**
 * Creates a colored die roll
@@ -88,6 +61,48 @@ function getColoredDicePool(rolls, diff) {
 	return reply;
 }
 
-module.exports.commands = {
-	"!roll": commandRoll
+/**
+* create roll command
+*/
+let rollCommand = new Command("!roll", "Make a standard V20 roll.");
+rollCommand.addParameter("numberOfDice", "Number", "number of dice", true,
+	// validator
+	function(val) {
+		if (val <= 0 || d > 20) {
+			return "Dice pool must be between 1 and 20";
+		} else {
+			return true;
+		}
+	},
+	"4"
+)
+rollCommand.addParameter("difficulty", "Number", "difficulty", true,
+	function(val) {
+		if (val <= 0 || val > 10) {
+			return "Difficulty must be between 1 and 10";
+		} else {
+			return true;
+		}
+	},
+	"8"
+)
+rollCommand.commandFunction = function(parameters) {
+	let result = dice.rollV20(parameters.numberOfDice, parameters.difficulty);
+	let commandResult = new MessageStack();
+
+	let replyString = ircColors.bold(irc.colors.wrap(colorScheme.botReply, nick + " rolled " + numberOfDice + " @ diff " + difficulty + " :")) + irc.colors.wrap("reset", " ");
+
+	replyString += getColoredDicePool(result.rolls, diff) + " ";
+
+	if (result.botch) {
+		replyString += ircColors.bold(irc.colors.wrap(colorScheme.messageBotch, "(BOTCH!)"));
+	} else if (result.successes > 0) {
+		replyString += ircColors.bold(irc.colors.wrap(colorScheme.messageSuccess, "(" + result.successes + " successes)"));
+	} else {
+		replyString += ircColors.bold(irc.colors.wrap(colorScheme.messageFailure, "(Failed)"));
+	}
+
+	commandResult.addPublicMessage(replyString);
+
+	return commandResult;
 }
