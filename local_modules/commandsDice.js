@@ -2,7 +2,7 @@ const irc = require('irc');
 const ircColors = require('irc-colors');
 const dice = require("./dice");
 
-const colorScheme = require('./colorscheme')
+const colorScheme = require('./colorscheme');
 const Command = require('./classes/Command');
 const MessageStack = require('./classes/MessageStack');
 
@@ -68,7 +68,7 @@ let rollCommand = new Command("!roll", "Make a standard V20 roll.");
 rollCommand.addParameter("numberOfDice", "Number", "number of dice", true,
 	// validator
 	function(val) {
-		if (val <= 0 || d > 20) {
+		if (val <= 0 || val > 20) {
 			return "Dice pool must be between 1 and 20";
 		} else {
 			return true;
@@ -86,13 +86,14 @@ rollCommand.addParameter("difficulty", "Number", "difficulty", true,
 	},
 	"8"
 )
-rollCommand.commandFunction = function(parameters) {
-	let result = dice.rollV20(parameters.numberOfDice, parameters.difficulty);
+rollCommand.commandFunction = function(nick, channel, values) {
+	console.log(values);
+	let result = dice.rollV20(values.numberOfDice, values.difficulty);
 	let commandResult = new MessageStack();
 
-	let replyString = ircColors.bold(irc.colors.wrap(colorScheme.botReply, nick + " rolled " + numberOfDice + " @ diff " + difficulty + " :")) + irc.colors.wrap("reset", " ");
+	let replyString = ircColors.bold(irc.colors.wrap(colorScheme.botReply, nick + " rolled " + values.numberOfDice + " @ diff " + values.difficulty + " :")) + irc.colors.wrap("reset", " ");
 
-	replyString += getColoredDicePool(result.rolls, diff) + " ";
+	replyString += getColoredDicePool(result.rolls, values.difficulty) + " ";
 
 	if (result.botch) {
 		replyString += ircColors.bold(irc.colors.wrap(colorScheme.messageBotch, "(BOTCH!)"));
@@ -106,3 +107,5 @@ rollCommand.commandFunction = function(parameters) {
 
 	return commandResult;
 }
+
+module.exports.commands.push(rollCommand);

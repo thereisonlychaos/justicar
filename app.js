@@ -73,10 +73,11 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
+let ircClient = null;
 
 if (config.irc && config.irc.server && config.irc.nick) {
 	console.log("Attempting IRC connection to", config.irc.server, "with nick", config.irc.nick);
-	var ircClient = new irc.Client(config.irc.server, config.irc.nick, config.irc.settings || {});
+	ircClient = new irc.Client(config.irc.server, config.irc.nick, config.irc.settings || {});
 
 	ircInterface.init(ircClient, null, config);// @TODO add schemas here
 } else {
@@ -90,9 +91,14 @@ ircClient.addListener('connect', function() {
 
 })
 
+ircClient.addListener("join#test", function() {
+	ircClient.say("#test", "foo");
+});
+
 ircClient.addListener('message', function(from, to, message) {
+	message.trim();
 	console.log(from, ' => ', to, ' : ', message);
-	if (ircInterface.isCommand(message)) {
+	if (ircInterface.isCommandMessage(message)) {
 		ircInterface.handleCommandMessage(from, to, message);
 	}
 })

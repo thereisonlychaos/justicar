@@ -6,7 +6,6 @@ const botOutput = require('./botOutput');
 let commandHandlers = {};
 commandHandlers["Dice"] = require('./commandsDice');
 
-var client = null;
 var schemas = null;
 var botOut = null;
 var config = {};
@@ -16,9 +15,7 @@ var commandDictionary = {};
 module.exports.init = function(c, s, newConfig) {
 	console.log(chalk.blue("Initializing commands"));
 	config = newConfig;
-	client = c;
-	schemas = s;
-	botOut = new botOutput(client, config.chat.staffChannel);
+	botOut = new botOutput(c, config.chat.staffChannel);
 
 
 	for (var key in commandHandlers) {
@@ -34,20 +31,20 @@ module.exports.init = function(c, s, newConfig) {
 		} else {
 			// load command into dictionary
 			let handler = commandHandlers[key];
-			for (var command in handler.commands) {
-				let commandName = command.commandName;
-				if (commandDictionary[commandName]) {
-					console.warn("Command", command, "is already defined.")
+			handler.commands.forEach(function(command) {
+				if (commandDictionary[command.commandName]) {
+					console.warn("Command", command.commandName, "is already defined.")
 				} else {					
-					console.log(commandName, "command created");
-					commandDictionary[commandName] = command;
+					console.log(command.commandName, "command created");
+					commandDictionary[command.commandName] = command;
 				}
-			}
+			})
 		}
 	}
 }
 
 module.exports.isCommandMessage = function(strMessage) {
+	strMessage.trim();
 	if (typeof strMessage === 'string') {
 		if(strMessage.slice(0,1) === "!") {
 			return true;
@@ -69,8 +66,15 @@ module.exports.handleCommandMessage = function(from, to, message) {
 	console.log("Command:", command);
 	console.log("Parameters:", messageAfterCommand);
 
-	if (commandDictionary.hasOwnProperty(command) && IsCommandValid(commandDictionary[command].params, from, to, args)) {
-		commandDictionary[command].func.apply({}, [from, to].concat(args));
+	if (commandDictionary.hasOwnProperty(command)) {
+
+		commandDictionary[command].execute(from, to, messageAfterCommand).then(
+			function(stack) {
+				botOut.processMessageStack(stack, from, to);
+			}).catch(
+			function(err) {
+				console.log("Error processing command", command, " : ", err);
+			});
 	}
 }
 

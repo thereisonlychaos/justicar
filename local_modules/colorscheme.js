@@ -8,5 +8,6 @@ module.exports = {
 	"rollOne": "light_red",
 	"messageBotch": "light_red",
 	"messageSuccess": "dark_green",
-	"messageFailure": "gray"
+	"messageFailure": "gray",
+	"messageError": "orange"
 }

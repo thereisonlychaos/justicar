@@ -6,28 +6,30 @@ class botOutput {
 			this.client = ircClient;
 			this.staffChannel = staffChannel;
 		} else {
+			console.log("ERROR: IRC client must be defined for ircOutput class");
 			throw new Error("IRC client must be defined for ircOutput class");
 		}
 	}
 
 	processMessageStack(stack, defaultNick, defaultChannel) {
+		let myClient = this.client;
 		stack.messages.forEach(function(stackMessage) {
 			let targetNick = stackMessage.nick || defaultNick;
 			let targetChannel = stackMessage.channel || defaultChannel;
 
 			switch(stackMessage.type) {
 				case "Private":					
-					this.client.say(targetNick, stackMessage.message);
+					myClient.say(targetNick, stackMessage.message);
 					break;
 				case "Notice":
-					this.client.notice(targetNick, stackMessage.message);
+					myClient.notice(targetNick, stackMessage.message);
 					break;
 				case "Public":
-					this.cllient.say(targetChannel, stackMessage.message);
+					myClient.say(targetChannel, stackMessage.message);
 					break;
 				case "Staff":
 					if (staffChannel) {
-						this.client.say(staffChannel, stackMessage.message);
+						myClient.say(staffChannel, stackMessage.message);
 					} else {
 						console.log(chalk.yellow("NO STAFF CHANNEL DEFINED. STAFF MESSAGE IGNORED:", stackMessage.message));
 					}

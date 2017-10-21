@@ -7,7 +7,11 @@ class MessageStack {
 	* Create a command result
 	*/
 	constructor() {
-	 	this.messages = [];
+	 	this._messages = [];
+	}
+
+	get messages() {
+		return this._messages;
 	}
 
 	/**
@@ -16,7 +20,7 @@ class MessageStack {
 	* @param {string} [nick] - Nick to send message to
 	*/
 	addPrivateMessage(message, nick = null) {
-	 	this.messages.push({
+	 	this._messages.push({
 	 		type: "Private",
 	 		nick: nick,
 	 		message: message
@@ -29,7 +33,7 @@ class MessageStack {
 	* @param {string} [channel] - channel to send message in
 	*/
 	addNoticeMessage(message, nick = null, channel = null) {
-	 	this.messages.push({
+	 	this._messages.push({
 	 		type: "Notice",
 	 		nick: nick,
 	 		message: message
@@ -42,7 +46,7 @@ class MessageStack {
 	* @param {string} [channel] - channel to send message
 	*/
 	addPublicMessage(message, channel = null) {
-	 	this.messages.push({
+	 	this._messages.push({
 	 		type: "Public",
 	 		channel: channel,
 	 		message: message
@@ -54,19 +58,10 @@ class MessageStack {
 	* @param {string} message - mesage to send to staff
 	*/
 	addStaffMessage(message) {
-	 	this.messages.push({
+	 	this._messages.push({
 	 		type: "Staff",
 	 		message: message
 	 	});
-	}
-
-	/**
-	* Send out messages in stack
-	* @param {object} ircClient - nodejs irc client
-	* @param {string} defaultNick - nick to default to if it is undefined
-	*/
-	sendAll(replier, defaultNick, defaultChannel, staffChannel) {
-
 	}
 }
 
