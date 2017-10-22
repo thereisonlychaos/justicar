@@ -11,11 +11,14 @@ class botOutput {
 		}
 	}
 
-	processMessageStack(stack, defaultNick, defaultChannel) {
+
+	processMessageStack(stack, from, to) {
 		let myClient = this.client;
 		stack.messages.forEach(function(stackMessage) {
-			let targetNick = stackMessage.nick || defaultNick;
-			let targetChannel = stackMessage.channel || defaultChannel;
+			let targetNick = stackMessage.nick || from;
+			let targetChannel = stackMessage.channel || to;
+
+			console.log("channel:", targetChannel, ", nick:", targetNick);
 
 			switch(stackMessage.type) {
 				case "Private":					
@@ -25,7 +28,11 @@ class botOutput {
 					myClient.notice(targetNick, stackMessage.message);
 					break;
 				case "Public":
-					myClient.say(targetChannel, stackMessage.message);
+					if (stackMessage.channel) {
+						myClient.say(targetChannel, stackMessage.message);
+					} else {
+						myClient.say(targetNick, stackMessage.message);
+					}
 					break;
 				case "Staff":
 					if (staffChannel) {

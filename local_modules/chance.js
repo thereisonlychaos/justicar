@@ -1,4 +1,5 @@
 const randomJs = require('random-js');
+const droll = require('droll');
 
 /**
 * Initialize Mersenne Twister Engine
@@ -39,7 +40,6 @@ function ensureFreshSeed() {
 * @returns {Object} roll result, properties are: rolls (array of rolls), success (number of successes) and botch (boolean of whether it is a botch)
 */
 module.exports.rollV20 = function(numberOfDice, difficulty) {
-	console.log("v20 Roll,", numberOfDice, "dice @ diff", difficulty);
 	// generate values to be returned
 	let result = {
 		rolls: randomJs.dice(10, numberOfDice)(engine),
@@ -70,4 +70,24 @@ module.exports.rollV20 = function(numberOfDice, difficulty) {
 	ensureFreshSeed();
 
 	return result;
+}
+
+/**
+* Rolls any arbitary number of dice
+* @param {Number} numberOfDice - number of dice to be rolled
+* @param {Number} sides - sides of those dice
+* @returns {Number[]} - results of the dice rolls
+*/
+module.exports.rollDice = function(numberOfDice, sides) {
+	return randomJS.dice(sides, numberOfDice)(engine);
+}
+
+/**
+* Rolls dice based on dice notation (e.g. 2d20+2)
+* @param {string} dice notation
+* @returns {DrollResult}
+*/
+module.exports.rollDiceNotation = function(diceNotation) {
+	console.log("rolling", diceNotation);
+	return droll.roll(diceNotation);
 }

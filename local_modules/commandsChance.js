@@ -1,12 +1,13 @@
 const irc = require('irc');
 const ircColors = require('irc-colors');
-const dice = require("./dice");
+const droll = require('droll');
+const chance = require("./chance");
 
 const colorScheme = require('./colorscheme');
+
 const Command = require('./classes/Command');
 const MessageStack = require('./classes/MessageStack');
 
-let replier = null;
 let schemas = null;
 
 /**
@@ -61,10 +62,14 @@ function getColoredDicePool(rolls, diff) {
 	return reply;
 }
 
-/**
+/*********************************
+* !roll
+**********************************
 * create roll command
 */
 let rollCommand = new Command("!roll", "Make a standard V20 roll.");
+
+// Add parameters
 rollCommand.addParameter("numberOfDice", "Number", "number of dice", true,
 	// validator
 	function(val) {
@@ -86,12 +91,22 @@ rollCommand.addParameter("difficulty", "Number", "difficulty", true,
 	},
 	"8"
 )
-rollCommand.commandFunction = function(nick, channel, values) {
-	console.log(values);
-	let result = dice.rollV20(values.numberOfDice, values.difficulty);
+
+// Add remainder description
+rollCommand.remainderDescription = "reason";
+
+// Create command function
+rollCommand.commandFunction = function(nick, channel, values, remainder) {
+	let result = chance.rollV20(values.numberOfDice, values.difficulty);
 	let commandResult = new MessageStack();
 
-	let replyString = ircColors.bold(irc.colors.wrap(colorScheme.botReply, nick + " rolled " + values.numberOfDice + " @ diff " + values.difficulty + " :")) + irc.colors.wrap("reset", " ");
+	let rollDescription = nick + " rolled " + values.numberOfDice + " @ diff " + values.difficulty;
+
+	if (remainder.length > 0) rollDescription += " [" + remainder + "]";
+
+	rollDescription += ":"
+
+	let replyString = ircColors.bold(irc.colors.wrap(colorScheme.botReply, rollDescription)) + irc.colors.wrap("reset", " ");
 
 	replyString += getColoredDicePool(result.rolls, values.difficulty) + " ";
 
@@ -103,9 +118,47 @@ rollCommand.commandFunction = function(nick, channel, values) {
 		replyString += ircColors.bold(irc.colors.wrap(colorScheme.messageFailure, "(Failed)"));
 	}
 
-	commandResult.addPublicMessage(replyString);
+	commandResult.addPublicMessage(replyString, nick, channel);
 
 	return commandResult;
 }
 
+// push into commands array
 module.exports.commands.push(rollCommand);
+
+/*********************************
+* !rpgroll
+**********************************
+* create rpg roll command
+*/
+let rpgrollCommand = new Command("!rpgroll", "Roll RPG style dice (2d20+2).");
+
+// add parameters
+rpgrollCommand.addParameter("diceNotation", "String", "dice formula", true,
+	// validator
+	function(val) {
+		console.log('validating:', val);
+		return droll.validate(val);
+	},
+	// example
+	"2d10+5"
+)
+
+// create command function
+rpgrollCommand.commandFunction = function(nick, channel, values, remainder) {
+	let commandResult = new MessageStack();
+	let result = chance.rollDiceNotation(values.diceNotation);
+
+	let rollDescription = nick + " rolled " + values.diceNotation + ": ";
+
+	let replyString = ircColors.bold(irc.colors.wrap(colorScheme.botReply, rollDescription)) + irc.colors.wrap("reset", " ");
+
+	replyString += result.total + " [" + result.toString() + "]";
+
+	commandResult.addPublicMessage(replyString, nick, channel);
+
+	return commandResult;
+}
+
+// push into commands array
+module.exports.commands.push(rpgrollCommand);

@@ -1,13 +1,14 @@
 const chalk = require('chalk');
 const botOutput = require('./botOutput');
 
-// modules
+var ircInterface = module.exports;
 
 let commandHandlers = {};
-commandHandlers["Dice"] = require('./commandsDice');
+commandHandlers["Chance"] = require('./commandsChance');
 
 var schemas = null;
 var botOut = null;
+var client = null;
 var config = {};
 
 var commandDictionary = {};
@@ -16,9 +17,10 @@ module.exports.init = function(c, s, newConfig) {
 	console.log(chalk.blue("Initializing commands"));
 	config = newConfig;
 	botOut = new botOutput(c, config.chat.staffChannel);
-
+	client = c;
 
 	for (var key in commandHandlers) {
+		console.log(chalk.blue("==Chance Commands=="));
 		// does the command handler have a proper command object? If not, warning.
 		if (!commandHandlers[key].init) {
 			console.log(chalk.yellow("WARNING:"), "Command Handler", key, "does not init function defined. Will not have replier or schemas set properly.")
@@ -41,6 +43,18 @@ module.exports.init = function(c, s, newConfig) {
 			})
 		}
 	}
+
+	client.addListener('connect', function() {
+		console.log("\n", chalk.bold.green(">>> Justicar has connected <<<"), "\n");
+	});
+
+	client.addListener('message', function(from, to, message) {
+		message.trim();
+		if (ircInterface.isCommandMessage(message)) {
+			ircInterface.handleCommandMessage(from, to, message);
+		}
+	})
+
 }
 
 module.exports.isCommandMessage = function(strMessage) {

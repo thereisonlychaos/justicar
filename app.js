@@ -1,78 +1,98 @@
+/******************************
+    --[ Justicar WoD Bot ]--
+     Made for Sanguinus.org
+
+         _.mmmmmmmmm._
+       dMMMY'~~~~~`YMMMb
+     dMMMY'         `YMMMb
+    dMMMY'           `YMMMb
+    CMMM(             )MMMD
+    YMMMb.           .dMMMY
+     YMMMb.         .dMMMY
+      `YMMMboo...oodMMMY'
+    .    `"#MMMMMMM#"'    .
+    Mb       `MMM'       dM
+    MMMM.   .dMMMb.   .dMMM
+    MMMMMMMMMMMMMMMMMMMMMMM
+    MMMMMMMMMMMMMMMMMMMMMMM
+    MMMM'   `YMMMY'   `YMMM
+    MM'      )MMM(      `MM
+    '       .MMMMM.       `
+            dMMMMMb
+           dMMMMMMMb
+            """""""
+
+          by Matt Webb
+********************************/
+
+/**
+* @fileOverview Justicar IRC Bot, an IRC bot with a web interface meant for managing large IRC World of Darkness games.
+* @author <a href="MatthewKyleWebb@gmail.com">Matthew Webb</a>
+* @version 0.1
+*/
+
+// This sets environment variable based on .env file, must be done first
 require('dotenv').config();
 
-// includes
-var fs = require('fs');
-var chalk = require('chalk');
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+//
+// Includes
+//
 
-var irc = require('irc');
+// General modules
+const 	fs = require('fs'),
+		chalk = require('chalk')
+;
 
-// config
+// Database modules
+const 	mongoose = require('mongoose')
+;
 
-var introASCII = fs.readFileSync('art/ankh.txt', 'utf8');
+// Express modules
+const 	express = require('express'),
+		passport = require('passport'),
+		morgan = require('morgan'),
+		cors = require('cors')
+		bodyParser = require('body-parser'),
+		errorhandler = require('errorhandler'),
+		session = require('express-session')
+;
+
+// IRC modules
+const 	irc = require('irc')
+;
+
+// Local Modules
+const 	ircInterface = require('./local_modules/ircInterface')
+;
+
+
+//
+// Edgy cool start up graphic. Cuz we rock it like its 1994 around here.
+//
+let introASCII = fs.readFileSync('art/ankh.txt', 'utf8');
 console.log(chalk.red(introASCII));
 
-var config = {};
-var ircConfig = {};
+
+//
+// Load configs
+let config = {};
+let ircConfig = {};
 
 if(process.env.NODE_ENV === 'development') {
 	console.log(chalk.yellow.bold("=== WARNING: Development Mode ==="))
 	config = require('./config/dev.json');
+
 } else {	
 	console.log(chalk.green("Production Mode"))
 	config = require('./config/production.json');
 }
 
 
-var index = require('./routes/index');
-var users = require('./routes/users');
-
-var app = express();
-
-
-// local modules
-var ircInterface = require('./local_modules/ircInterface')
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', index);
-app.use('/users', users);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-module.exports = app;
-
+// ***
+//
+// Configure IRC bot client
+//
+// ***
 let ircClient = null;
 
 if (config.irc && config.irc.server && config.irc.nick) {
@@ -85,20 +105,20 @@ if (config.irc && config.irc.server && config.irc.nick) {
 	process.exit();
 }
 
-ircClient.addListener('connect', function() {
-	console.log("\n", chalk.bold.green(">>> Justicar has connected <<<"), "\n");
+
+// ***
+//
+// Initialize Express App
+//
+// ***
+const app = express();
+
+// Allow cross-origin using CORS module
+app.use(cors());
+
+// Configure express
+app.use(morgan(':date - :method :url :status :res[content-length] - :response-time ms'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 
-})
-
-ircClient.addListener("join#test", function() {
-	ircClient.say("#test", "foo");
-});
-
-ircClient.addListener('message', function(from, to, message) {
-	message.trim();
-	console.log(from, ' => ', to, ' : ', message);
-	if (ircInterface.isCommandMessage(message)) {
-		ircInterface.handleCommandMessage(from, to, message);
-	}
-})

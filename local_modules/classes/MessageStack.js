@@ -43,11 +43,15 @@ class MessageStack {
 	/**
 	* Add message to be sent to the channel for everyone to see
 	* @param {string} message - IRC message
+	* @param {string} [nick] - nick to send message if channel is null
 	* @param {string} [channel] - channel to send message
 	*/
-	addPublicMessage(message, channel = null) {
+	addPublicMessage(message, nick = null, channel = null) {
+		if (String(channel).substring(0, 1) !== "#") channel = null;
+
 	 	this._messages.push({
 	 		type: "Public",
+	 		nick: channel,
 	 		channel: channel,
 	 		message: message
 	 	});
