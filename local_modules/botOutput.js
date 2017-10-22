@@ -1,24 +1,16 @@
 var chalk = require('chalk');
 
 class botOutput {
-	constructor(ircClient, staffChannel = null) {
-		if (ircClient) {
-			this.client = ircClient;
-			this.staffChannel = staffChannel;
-		} else {
-			console.log("ERROR: IRC client must be defined for ircOutput class");
-			throw new Error("IRC client must be defined for ircOutput class");
-		}
+	constructor() {
+		this.client = null;
+		this.staffChannel = null;
 	}
-
 
 	processMessageStack(stack, from, to) {
 		let myClient = this.client;
 		stack.messages.forEach(function(stackMessage) {
 			let targetNick = stackMessage.nick || from;
 			let targetChannel = stackMessage.channel || to;
-
-			console.log("channel:", targetChannel, ", nick:", targetNick);
 
 			switch(stackMessage.type) {
 				case "Private":					
@@ -49,4 +41,4 @@ class botOutput {
 
 }
 
-module.exports = botOutput;
+module.exports = new botOutput();

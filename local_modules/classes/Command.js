@@ -47,6 +47,13 @@ class Command {
 		return this._name;
 	}
 
+	/**
+	* getter for name
+	*/
+	get description() {
+		return this._description;
+	}
+
 	/** 
 	* setter for validator. The validator is checked to see if a command hsould be invoked. By default, just returns true
 	*/

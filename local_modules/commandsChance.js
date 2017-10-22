@@ -149,7 +149,7 @@ rpgrollCommand.commandFunction = function(nick, channel, values, remainder) {
 	let commandResult = new MessageStack();
 	let result = chance.rollDiceNotation(values.diceNotation);
 
-	let rollDescription = nick + " rolled " + values.diceNotation + ": ";
+	let rollDescription = nick + " rolled " + values.diceNotation + ":";
 
 	let replyString = ircColors.bold(irc.colors.wrap(colorScheme.botReply, rollDescription)) + irc.colors.wrap("reset", " ");
 

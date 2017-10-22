@@ -40,7 +40,8 @@ require('dotenv').config();
 
 // General modules
 const 	fs = require('fs'),
-		chalk = require('chalk')
+		chalk = require('chalk'),
+		q = require('q')
 ;
 
 // Database modules
@@ -58,7 +59,8 @@ const 	express = require('express'),
 ;
 
 // IRC modules
-const 	irc = require('irc')
+const 	irc = require('irc'),
+		botOutput = require('./local_modules/botOutput')
 ;
 
 // Local Modules
@@ -81,11 +83,31 @@ let ircConfig = {};
 if(process.env.NODE_ENV === 'development') {
 	console.log(chalk.yellow.bold("=== WARNING: Development Mode ==="))
 	config = require('./config/dev.json');
-
+	mongoose.set("debug", true);
 } else {	
 	console.log(chalk.green("Production Mode"))
 	config = require('./config/production.json');
 }
+
+// ***
+//
+// Database
+//
+// ***
+mongoose.Promise = q.Promise;
+
+let dbConnectionPromise = mongoose.connect(config.db.uri, { useMongoClient: true }).then(
+	function(db) {
+		console.log(chalk.green("\nConnected to database @", config.db.uri))
+		return true;
+	},
+	function(err) {
+		console.error(chalk.red("\nDatabase connection error:", err))
+		process.exit();
+	}
+);
+
+require("./models.js");
 
 
 // ***
@@ -93,17 +115,16 @@ if(process.env.NODE_ENV === 'development') {
 // Configure IRC bot client
 //
 // ***
-let ircClient = null;
 
 if (config.irc && config.irc.server && config.irc.nick) {
-	console.log("Attempting IRC connection to", config.irc.server, "with nick", config.irc.nick);
-	ircClient = new irc.Client(config.irc.server, config.irc.nick, config.irc.settings || {});
+	botOutput.client = new irc.Client(config.irc.server, config.irc.nick, Object.assign({}, config.irc.settings, {autoConnect:false}));
 
-	ircInterface.init(ircClient, null, config);// @TODO add schemas here
 } else {
 	console.error(chalk.red("!!!Invalid IRC configuration!!!"));
 	process.exit();
 }
+
+
 
 
 // ***
@@ -113,6 +134,31 @@ if (config.irc && config.irc.server && config.irc.nick) {
 // ***
 const app = express();
 
+// set error handler
+
+if(process.env.NODE_ENV === 'development') {
+	app.use(function(err, req, res, next) {
+		console.log(err.stack);
+
+		res.status(err.status || 500);
+
+		res.json({'errors': {
+			message: err.message,
+			stack: err.stack,
+			error: err,
+		}})
+	})
+} else {
+	app.use(function(err, req, res, next) {
+		res.status(err.status || 500);
+
+		res.json({'errors': {
+			message: err.message,
+			error: {},
+		}})
+	})
+}
+
 // Allow cross-origin using CORS module
 app.use(cors());
 
@@ -120,5 +166,28 @@ app.use(cors());
 app.use(morgan(':date - :method :url :status :res[content-length] - :response-time ms'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(require('method-override')());
+
+// session config
+app.use(session({ secret: "f493bd7f94854f1899fe3cbf77110568b", cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }))
 
 
+
+const express_port = config.www.port || 3000;
+
+
+// ***
+//
+// Starting
+//
+// ***
+
+dbConnectionPromise.then(
+	function() {
+		const server = app.listen(express_port, function() {
+			console.log(chalk.green.bold("\nWeb server ready on port", express_port));
+		
+			ircInterface.init(config);// @TODO add schemas here
+		})
+	}
+)

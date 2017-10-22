@@ -9,5 +9,14 @@
 			"autoConnect": true,
 			"retryCount": 100
 		}
+	},
+	"chat": {
+		"staffChannel": "#olympus"
+	},
+	"db": {
+		"uri": "mongodb://127.0.0.1/Justicar"
+	},
+	"www": {
+		"port": 80
 	}
 }

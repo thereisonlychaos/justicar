@@ -4,7 +4,7 @@ const botOutput = require('./botOutput');
 var ircInterface = module.exports;
 
 let commandHandlers = {};
-commandHandlers["Chance"] = require('./commandsChance');
+commandHandlers["Dice"] = require('./commandsChance');
 
 var schemas = null;
 var botOut = null;
@@ -13,14 +13,12 @@ var config = {};
 
 var commandDictionary = {};
 
-module.exports.init = function(c, s, newConfig) {
-	console.log(chalk.blue("Initializing commands"));
+module.exports.init = function(newConfig) {
+	console.log(chalk.green("\nInitializing IRC commands"));
 	config = newConfig;
-	botOut = new botOutput(c, config.chat.staffChannel);
-	client = c;
 
 	for (var key in commandHandlers) {
-		console.log(chalk.blue("==Chance Commands=="));
+		console.log(chalk.blue("\n== " + key + " Commands =="));
 		// does the command handler have a proper command object? If not, warning.
 		if (!commandHandlers[key].init) {
 			console.log(chalk.yellow("WARNING:"), "Command Handler", key, "does not init function defined. Will not have replier or schemas set properly.")
@@ -37,24 +35,27 @@ module.exports.init = function(c, s, newConfig) {
 				if (commandDictionary[command.commandName]) {
 					console.warn("Command", command.commandName, "is already defined.")
 				} else {					
-					console.log(command.commandName, "command created");
+					console.log(command.format, "-", chalk.grey(command.description));
 					commandDictionary[command.commandName] = command;
 				}
 			})
 		}
 	}
 
-	client.addListener('connect', function() {
-		console.log("\n", chalk.bold.green(">>> Justicar has connected <<<"), "\n");
+	console.log(chalk.yellow("\nAttempting IRC connection to", config.irc.server, "with nick", config.irc.nick));
+
+	botOutput.client.addListener('connect', function() {
+		console.log("\n", chalk.bold.green(">>> Justicar is online <<<"), "\n");
 	});
 
-	client.addListener('message', function(from, to, message) {
+	botOutput.client.addListener('message', function(from, to, message) {
 		message.trim();
 		if (ircInterface.isCommandMessage(message)) {
 			ircInterface.handleCommandMessage(from, to, message);
 		}
-	})
+	});
 
+	botOutput.client.connect();
 }
 
 module.exports.isCommandMessage = function(strMessage) {
@@ -84,11 +85,10 @@ module.exports.handleCommandMessage = function(from, to, message) {
 
 		commandDictionary[command].execute(from, to, messageAfterCommand).then(
 			function(stack) {
-				botOut.processMessageStack(stack, from, to);
+				botOutput.processMessageStack(stack, from, to);
 			}).catch(
 			function(err) {
 				console.log("Error processing command", command, " : ", err);
 			});
 	}
 }
-

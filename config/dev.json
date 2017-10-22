@@ -13,5 +13,11 @@
 	},
 	"chat": {
 		"staffChannel": "#test"
+	},
+	"db": {
+		"uri": "mongodb://127.0.0.1/JusticarDev"
+	},
+	"www": {
+		"port": 80
 	}
 }
