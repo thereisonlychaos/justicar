@@ -1,9 +1,38 @@
-var chalk = require('chalk');
+const chalk = require('chalk');
+const JusticarIRC = require('../JusticarIRC');
 
-class botOutput {
+class Bot {
 	constructor() {
-		this.client = null;
+		this._client = null;
 		this.staffChannel = null;
+	}
+
+	set client(newClient) {
+		this._client = newClient;
+
+		this._client.addListener('connect', function() {
+			console.log("\n", chalk.bold.green(">>> Justicar is online <<<"), "\n");
+		});
+
+		this._client.addListener('message', function(from, to, message) {
+			message.trim();
+			if (JusticarIRC.isCommandMessage(message)) {
+				JusticarIRC.handleCommandMessage(from, to, message);
+			}
+		});
+	}
+
+	get client() {
+		return this._client;
+	}
+
+	connect() {
+		if(this._client) {
+			console.log(chalk.yellow("\nAttempting IRC connection to", this._client.opt.server, "with nick", this._client.opt.nick));
+			this._client.connect();
+		} else {
+			console.log(chalk.red('IRC client not set for bot. Cannot connect.'))
+		}
 	}
 
 	processMessageStack(stack, from, to) {
@@ -41,4 +70,4 @@ class botOutput {
 
 }
 
-module.exports = new botOutput();
+module.exports = Bot;

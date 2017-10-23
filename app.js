@@ -39,10 +39,15 @@ require('dotenv').config();
 //
 
 // General modules
-const 	fs = require('fs'),
-		chalk = require('chalk'),
+const 	chalk = require('chalk'),
 		q = require('q')
 ;
+
+//
+// Edgy cool start up graphic. Cuz we rock it like its 1994 around here.
+//
+let introASCII = require('fs').readFileSync('art/ankh.txt', 'utf8');
+console.log(chalk.red(introASCII));
 
 // Database modules
 const 	mongoose = require('mongoose')
@@ -60,20 +65,8 @@ const 	express = require('express'),
 
 // IRC modules
 const 	irc = require('irc'),
-		botOutput = require('./local_modules/botOutput')
+		JusticarIRC = require('./irc/JusticarIRC')
 ;
-
-// Local Modules
-const 	ircInterface = require('./local_modules/ircInterface')
-;
-
-
-//
-// Edgy cool start up graphic. Cuz we rock it like its 1994 around here.
-//
-let introASCII = fs.readFileSync('art/ankh.txt', 'utf8');
-console.log(chalk.red(introASCII));
-
 
 //
 // Load configs
@@ -107,7 +100,7 @@ let dbConnectionPromise = mongoose.connect(config.db.uri, { useMongoClient: true
 	}
 );
 
-require("./models.js");
+require("./database/models.js");
 
 
 // ***
@@ -117,7 +110,7 @@ require("./models.js");
 // ***
 
 if (config.irc && config.irc.server && config.irc.nick) {
-	botOutput.client = new irc.Client(config.irc.server, config.irc.nick, Object.assign({}, config.irc.settings, {autoConnect:false}));
+	JusticarIRC.bot.client = new irc.Client(config.irc.server, config.irc.nick, Object.assign({}, config.irc.settings, {autoConnect:false}));
 
 } else {
 	console.error(chalk.red("!!!Invalid IRC configuration!!!"));
@@ -186,8 +179,8 @@ dbConnectionPromise.then(
 	function() {
 		const server = app.listen(express_port, function() {
 			console.log(chalk.green.bold("\nWeb server ready on port", express_port));
-		
-			ircInterface.init(config);// @TODO add schemas here
+			
+			JusticarIRC.bot.connect();
 		})
 	}
 )

@@ -7,7 +7,10 @@
 			"port": 6667,
 			"debug": false,
 			"autoConnect": true,
-			"retryCount": 100
+			"retryCount": 100,
+			"userName": "Justicar",
+			"realName": "Justicar WoD IRC Bot",
+			"debug": true
 		}
 	},
 	"chat": {

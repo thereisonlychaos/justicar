@@ -1,22 +1,13 @@
 const irc = require('irc');
 const ircColors = require('irc-colors');
 const droll = require('droll');
-const chance = require("./chance");
+const chance = require("../functions/dice");
 
-const colorScheme = require('./colorscheme');
+const colorScheme = require('../settings/colorscheme');
 
-const Command = require('./classes/Command');
-const MessageStack = require('./classes/MessageStack');
+const Command = require('../classes/Command');
+const MessageStack = require('../classes/MessageStack');
 
-let schemas = null;
-
-/**
-* Initializes the schemas and IRC replier
-* @param {object} schemas - the schemas object from Mongoose used to access the database
-*/
-module.exports.init = function(s) {
-	schemas = s;
-}
 
 /**
 * This array stores command. All commands modules must have this to be processed by ircinterface.js

@@ -3,7 +3,7 @@ const q = require('q');
 const irc = require('irc');
 const ircColors = require('irc-colors');
 
-const colorScheme = require('../colorscheme');
+const colorScheme = require('../settings/colorscheme');
 const MessageStack = require("./MessageStack");
 
 const ERRORS = {
