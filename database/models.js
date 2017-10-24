@@ -167,3 +167,13 @@ const CharacterSchema = new mongoose.Schema({
 })
 
 mongoose.model("Character", CharacterSchema);
+
+const PoolSchema = new mongoose.Schema({
+	_type: { type: ObjectId, ref: "Character" },
+	type: { type: String },
+	current: { type: Number, default: 0 },
+	max: { type: Number, default: 0 }
+});
+
+mongoose.model("Pool", PoolSchema);
+
