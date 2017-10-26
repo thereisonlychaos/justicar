@@ -57,7 +57,8 @@ const 	mongoose = require('mongoose')
 const 	express = require('express'),
 		passport = require('passport'),
 		morgan = require('morgan'),
-		cors = require('cors')
+		cors = require('cors'),
+		path = require('path'),
 		bodyParser = require('body-parser'),
 		errorhandler = require('errorhandler'),
 		session = require('express-session')
@@ -101,6 +102,10 @@ let dbConnectionPromise = mongoose.connect(config.db.uri, { useMongoClient: true
 );
 
 require("./database/models.js");
+
+
+require("./config/passport.js");
+
 
 
 // ***
@@ -156,6 +161,9 @@ if(process.env.NODE_ENV === 'development') {
 app.use(cors());
 
 // Configure express
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
 app.use(morgan(':date - :method :url :status :res[content-length] - :response-time ms'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -163,6 +171,8 @@ app.use(require('method-override')());
 
 // session config
 app.use(session({ secret: "f493bd7f94854f1899fe3cbf77110568b", cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }))
+
+app.use(express.static(__dirname + "/public"))
 
 
 
@@ -174,13 +184,19 @@ const express_port = config.www.port || 3000;
 // Starting
 //
 // ***
+let server;
 
 dbConnectionPromise.then(
 	function() {
-		const server = app.listen(express_port, function() {
+		server = app.listen(express_port, function() {
 			console.log(chalk.green.bold("\nWeb server ready on port", express_port));
 			
 			JusticarIRC.bot.connect();
 		})
+	},
+	function(err) {
+		console.error(err);
+		console.log('%s MongoDB connection error.');
+		process.exit();
 	}
 )
