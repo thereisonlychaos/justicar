@@ -168,12 +168,18 @@ app.use(morgan(':date - :method :url :status :res[content-length] - :response-ti
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(require('method-override')());
+app.use(passport.initialize());
+
 
 // session config
 app.use(session({ secret: "f493bd7f94854f1899fe3cbf77110568b", cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }))
 
 app.use(express.static(__dirname + "/public"))
 
+/**
+* Routes module handles all route rendering
+*/
+app.use(require("./routes"));
 
 
 const express_port = config.www.port || 3000;
@@ -189,14 +195,20 @@ let server;
 dbConnectionPromise.then(
 	function() {
 		server = app.listen(express_port, function() {
-			console.log(chalk.green.bold("\nWeb server ready on port", express_port));
+			console.log(chalk.green.bold("\nWeb server ready on port", server.address().port));
 			
 			JusticarIRC.bot.connect();
 		})
 	},
 	function(err) {
 		console.error(err);
-		console.log('%s MongoDB connection error.');
+		console.log('%s MongoDB connection error. Exiting.');
+		process.exit();
+	}
+).catch(
+	function(err) {
+		console.error(err);
+		console.log('Error starting server. Exiting.');
 		process.exit();
 	}
 )

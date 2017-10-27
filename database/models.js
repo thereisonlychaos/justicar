@@ -108,7 +108,8 @@ const UserSchema = new mongoose.Schema({
 	resetCode: { type: String },
 	active: { type: Boolean, default: true },
 	role: { type: ObjectId, ref: "RoleSchema" },
-	isSuperUser: { type: Boolean, default: false }
+	isSuperUser: { type: Boolean, default: false },
+	tokens: [{ type: String }]
 }, {timestamps: true})
 
 UserSchema.plugin(uniqueValidator);
@@ -121,6 +122,23 @@ UserSchema.methods.setPassword = function(password) {
 UserSchema.methods.checkPassword = function(password) {
 	let candidateHash = crypto.pbkdf2Sync(password, this.salt, hashIterations, hashLength, hashDigest);
 	return this.has === candidateHash;
+}
+
+UserSchema.methods.setToken = function() {
+	let token = crypto.randomBytes(16).toString('hex');
+	this.tokens.push(token);
+	if (this.tokens.length > 30) {
+		this.tokens.shift();
+	}
+	return token;
+}
+
+UserSchema.methods.unsetToken = function(token) {
+	let index = this.tokens.indexOf(token);
+	if (index >= 0) {
+		this.tokens.splice(index, 1);
+	}	
+	return index >= 0;
 }
 
 mongoose.model("User", UserSchema);
