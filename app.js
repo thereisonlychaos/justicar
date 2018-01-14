@@ -75,11 +75,11 @@ let config = {};
 let ircConfig = {};
 
 if(process.env.NODE_ENV === 'development') {
-	console.log(chalk.yellow.bold("=== WARNING: Development Mode ==="))
+	console.log(chalk.yellow.bold("=== WARNING: Development Mode ==="));
 	config = require('./config/dev.json');
 	mongoose.set("debug", true);
 } else {	
-	console.log(chalk.green("Production Mode"))
+	console.log(chalk.green("Production Mode"));
 	config = require('./config/production.json');
 }
 
@@ -92,11 +92,11 @@ mongoose.Promise = q.Promise;
 
 let dbConnectionPromise = mongoose.connect(config.db.uri, { useMongoClient: true }).then(
 	function(db) {
-		console.log(chalk.green("\nConnected to database @", config.db.uri))
+		console.log(chalk.green("\nConnected to database @", config.db.uri));
 		return true;
 	},
 	function(err) {
-		console.error(chalk.red("\nDatabase connection error:", err))
+		console.error(chalk.red("\nDatabase connection error:", err));
 		process.exit();
 	}
 );
@@ -144,8 +144,8 @@ if(process.env.NODE_ENV === 'development') {
 			message: err.message,
 			stack: err.stack,
 			error: err,
-		}})
-	})
+		}});
+	});
 } else {
 	app.use(function(err, req, res, next) {
 		res.status(err.status || 500);
@@ -153,8 +153,8 @@ if(process.env.NODE_ENV === 'development') {
 		res.json({'errors': {
 			message: err.message,
 			error: {},
-		}})
-	})
+		}});
+	});
 }
 
 // Allow cross-origin using CORS module
@@ -172,9 +172,9 @@ app.use(passport.initialize());
 
 
 // session config
-app.use(session({ secret: "f493bd7f94854f1899fe3cbf77110568b", cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }))
+app.use(session({ secret: "f493bd7f94854f1899fe3cbf77110568b", cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
 
-app.use(express.static(__dirname + "/public"))
+app.use(express.static(__dirname + "/public"));
 
 /**
 * Routes module handles all route rendering
@@ -198,7 +198,7 @@ dbConnectionPromise.then(
 			console.log(chalk.green.bold("\nWeb server ready on port", server.address().port));
 			
 			JusticarIRC.bot.connect();
-		})
+		});
 	},
 	function(err) {
 		console.error(err);
@@ -211,4 +211,4 @@ dbConnectionPromise.then(
 		console.log('Error starting server. Exiting.');
 		process.exit();
 	}
-)
+);
