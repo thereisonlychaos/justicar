@@ -12,20 +12,33 @@ module.exports = function(grunt) {
 		},
 
 		jshint: {
-			options: {
-				reporter: require('jshint-stylish'),
-				esversion: 6
+			server: {
+				options: {
+					reporter: require('jshint-stylish'),
+					esversion: 6,
+					node: true
+				},
+				build: [
+					'Gruntfile.js',
+					'app.js',
+					'/irc/**/*.js',
+					'/database/**/*.js',
+					'/config/*.js',
+					'/routes/**/*.js',
+					'/bin/**/*.js'
+				]			
 			},
-			build: [
-				'Gruntfile.js',
-				'app.js',
-				'/irc/**/*.js',
-				'/database/**/*.js',
-				'/config/*.js',
-				'/client/**/*.js',
-				'/routes/**/*.js',
-				'/bin/**/*.js'
-			]
+			client: {
+				options: {
+					reporter: require('jshint-stylish'),
+					esversion: 6,
+					browserify: true
+				},
+				build: [
+					'/client/**/*.js'
+				]	
+			}
+
 		},
 
 		browserify: {
