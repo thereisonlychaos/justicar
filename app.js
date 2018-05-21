@@ -78,7 +78,7 @@ if(process.env.NODE_ENV === 'development') {
 	console.log(chalk.yellow.bold("=== WARNING: Development Mode ==="));
 	config = require('./config/dev.json');
 	mongoose.set("debug", true);
-} else {	
+} else {
 	console.log(chalk.green("Production Mode"));
 	config = require('./config/production.json');
 }
@@ -196,7 +196,7 @@ dbConnectionPromise.then(
 	function() {
 		server = app.listen(express_port, function() {
 			console.log(chalk.green.bold("\nWeb server ready on port", server.address().port));
-			
+
 			JusticarIRC.bot.connect();
 		});
 	},
