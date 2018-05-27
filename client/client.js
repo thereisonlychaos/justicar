@@ -61,7 +61,7 @@ angular.module('Justicar.WebClient', [
     '$translate',
     '$transitions',
     'JusticarAPI',
-    function($rootScope, $log, $translate, $transitions, JusticarAPI) {\
+    function($rootScope, $log, $translate, $transitions, JusticarAPI) {
 
     }
 
