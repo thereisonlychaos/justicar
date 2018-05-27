@@ -161,6 +161,7 @@ module.exports = function (grunt) {
         'less'
     ]);
     grunt.registerTask('dev', [
+        'jshint',
         'browserify:lib',
         'browserify:dev',
         'less',
