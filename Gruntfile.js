@@ -36,7 +36,7 @@ module.exports = function (grunt) {
 
         supervisor: {
             target: {
-                script: 'server/server.js',
+                script: 'app.js',
                 options: {
                     ignore: [ "client", "public" ]
                 }

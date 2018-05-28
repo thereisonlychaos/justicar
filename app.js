@@ -33,7 +33,7 @@
 
 // This sets environment variable based on .env file, must be done first
 require('dotenv').config();
-
+console.log(process.env.NODE_ENV);
 //
 // Includes
 //
@@ -49,20 +49,17 @@ const 	chalk = require('chalk'),
 let introASCII = require('fs').readFileSync('art/ankh.txt', 'utf8');
 console.log(chalk.red(introASCII));
 
+if(process.env.NODE_ENV === 'development') {
+	console.log(chalk.yellow.bold("=== WARNING: Development Mode ==="));
+} else {
+	console.log(chalk.green("Production Mode"));
+}
+
 // Database modules
 const 	mongoose = require('mongoose')
 ;
 
-// Express modules
-const 	express = require('express'),
-		passport = require('passport'),
-		morgan = require('morgan'),
-		cors = require('cors'),
-		path = require('path'),
-		bodyParser = require('body-parser'),
-		errorhandler = require('errorhandler'),
-		session = require('express-session')
-;
+
 
 // IRC modules
 const 	irc = require('irc'),
@@ -71,17 +68,7 @@ const 	irc = require('irc'),
 
 //
 // Load configs
-let config = {};
-let ircConfig = {};
-
-if(process.env.NODE_ENV === 'development') {
-	console.log(chalk.yellow.bold("=== WARNING: Development Mode ==="));
-	config = require('./config/dev.json');
-	mongoose.set("debug", true);
-} else {
-	console.log(chalk.green("Production Mode"));
-	config = require('./config/production.json');
-}
+let config = require("./config/config").getConfig();
 
 // ***
 //
@@ -89,6 +76,11 @@ if(process.env.NODE_ENV === 'development') {
 //
 // ***
 mongoose.Promise = q.Promise;
+
+// Set to debug mode if in dev mode (handled by .env file)
+if(process.env.NODE_ENV === 'development') {
+	mongoose.set("debug", true);
+}
 
 let dbConnectionPromise = mongoose.connect(config.db.uri, { useMongoClient: true }).then(
 	function(db) {
@@ -102,11 +94,6 @@ let dbConnectionPromise = mongoose.connect(config.db.uri, { useMongoClient: true
 );
 
 require("./database/models.js");
-
-
-require("./config/passport.js");
-
-
 
 // ***
 //
@@ -123,82 +110,15 @@ if (config.irc && config.irc.server && config.irc.nick) {
 }
 
 
-
-
-// ***
-//
-// Initialize Express App
-//
-// ***
-const app = express();
-
-// set error handler
-
-if(process.env.NODE_ENV === 'development') {
-	app.use(function(err, req, res, next) {
-		console.log(err.stack);
-
-		res.status(err.status || 500);
-
-		res.json({'errors': {
-			message: err.message,
-			stack: err.stack,
-			error: err,
-		}});
-	});
-} else {
-	app.use(function(err, req, res, next) {
-		res.status(err.status || 500);
-
-		res.json({'errors': {
-			message: err.message,
-			error: {},
-		}});
-	});
-}
-
-// Allow cross-origin using CORS module
-app.use(cors());
-
-// Configure express
-app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views'));
-
-app.use(morgan(':date - :method :url :status :res[content-length] - :response-time ms'));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(require('method-override')());
-app.use(passport.initialize());
-
-
-// session config
-app.use(session({ secret: "f493bd7f94854f1899fe3cbf77110568b", cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
-
-app.use(express.static(__dirname + "/public"));
-
-/**
-* Routes module handles all route rendering
-*/
-app.use(require("./routes"));
-
-
-const express_port = config.www.port || 3000;
-
-
-// ***
-//
-// Starting
-//
-// ***
-let server;
+let server = require('./server/server.js');
 
 dbConnectionPromise.then(
 	function() {
-		server = app.listen(express_port, function() {
+		server.listen(config.www.port || 3000, function() {
 			console.log(chalk.green.bold("\nWeb server ready on port", server.address().port));
-
-			JusticarIRC.bot.connect();
 		});
+
+		JusticarIRC.bot.connect();
 	},
 	function(err) {
 		console.error(err);
