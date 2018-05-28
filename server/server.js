@@ -19,7 +19,7 @@ let config = require("../config/config.js").getConfig();
 // ***
 let server = express();
 
-module.exports.express = server;
+module.exports = server;
 
 // set error handler
 

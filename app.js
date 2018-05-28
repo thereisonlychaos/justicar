@@ -114,8 +114,9 @@ let server = require('./server/server.js');
 
 dbConnectionPromise.then(
 	function() {
-		server.listen(config.www.port || 3000, function() {
-			console.log(chalk.green.bold("\nWeb server ready on port", server.address().port));
+		let usePort = config.www.port || 3000;
+		server.listen(usePort, function() {
+			console.log(chalk.green.bold("\nWeb server ready on port", usePort));
 		});
 
 		JusticarIRC.bot.connect();
