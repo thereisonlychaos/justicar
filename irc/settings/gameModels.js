@@ -14,10 +14,10 @@ class CharacterElementModel {
 			this._name = name;
 		} else {
 			throw new Error("Invalid value for name in character element");
-		}	
+		}
 		this._help = null;
 
-		this._canUpgradeAtCreation = false;
+		this.canUpgradeAtCreation = false;
 		this.creationCost = function(currentValue, futureValue) { return 0; }
 		this.canUpgradeWithFreebie = false;
 		this.freebieCost = function(currentValue, futureValue) { return 0; }
@@ -55,7 +55,7 @@ class NumericElementModel extends CharacterElementModel {
 
 		this._nMax = null;
 		this._fMax = function() { return null };
-		
+
 		this._nStartingValue = 0;
 		this._fStartingValue = function() { return null };
 	}
@@ -88,7 +88,7 @@ class NumericElementModel extends CharacterElementModel {
 	Max (...args) {
 		return this._fChangePerWeek.apply(this, args);
 	}
-	
+
 }
 
 /**
@@ -97,7 +97,7 @@ class NumericElementModel extends CharacterElementModel {
 class PoolModel extends NumericElementModel {
 	constructor(name) {
 		super(name);
-		
+
 		this._nChangePerDay = null;
 		this._fChangePerDay = function() { return null };
 
