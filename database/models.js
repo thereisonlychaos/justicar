@@ -98,7 +98,7 @@ var nameValidator = [
 const UserSchema = new mongoose.Schema({
 	username: {type: String, lowercase: true, unique: true, required: true, index: true, validate: nameValidator },
 	email: {type: String, lowercase: true, unique: true, required: true, index: true, validate: validators({ validator: 'isEmail'}) },
-	
+
 	// login and password
 	hash: String,
 	salt: String,
@@ -107,7 +107,26 @@ const UserSchema = new mongoose.Schema({
 	activationCode: { type: String, default: Random.string()(mt, 24) },
 	resetCode: { type: String },
 	active: { type: Boolean, default: true },
-	role: { type: ObjectId, ref: "RoleSchema" },
+	role: [{ type: ObjectId, ref: "RoleSchema" }],
+	permissions: { // updated on delta of role
+		// access
+		adminAccess: { type: Boolean, default: false },
+
+		// logs
+		canReadLogs: {type: Boolean, default: false},
+		canReadSecretLogs: {type: Boolean, default: false},
+
+		// sheets
+		canViewPlayerSheets: {type: Boolean, default: false },
+		canViewNPCSheets: {type: Boolean, default: false },
+		cansCreateCharacterSheets: {type: Boolean, default: false},
+		canApproveCharacterSheets: {type: Boolean, default: false},
+		canModifyCharacterSheets: {type: Boolean, default: false},
+
+		// channels
+		canCreateChannels: {type: Boolean, default: false },
+		canModifyChannels: {type: Boolean, default: false}
+	},
 	isSuperUser: { type: Boolean, default: false },
 	tokens: [{ type: String }]
 }, {timestamps: true})
@@ -137,7 +156,7 @@ UserSchema.methods.unsetToken = function(token) {
 	let index = this.tokens.indexOf(token);
 	if (index >= 0) {
 		this.tokens.splice(index, 1);
-	}	
+	}
 	return index >= 0;
 }
 
@@ -150,7 +169,7 @@ mongoose.model("User", UserSchema);
 const RoleSchema = new mongoose.Schema({
 	name: {type: String, required: true},
 
-	// access 
+	// access
 	adminAccess: { type: Boolean, default: false },
 
 	// logs
@@ -167,7 +186,7 @@ const RoleSchema = new mongoose.Schema({
 	// channels
 	canCreateChannels: {type: Boolean, default: false },
 	canModifyChannels: {type: Boolean, default: false}
-	
+
 }, {timestamps: true})
 
 mongoose.model("Role", RoleSchema);
@@ -194,4 +213,3 @@ const PoolSchema = new mongoose.Schema({
 });
 
 mongoose.model("Pool", PoolSchema);
-
