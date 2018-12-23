@@ -63,7 +63,7 @@ server.use(passport.initialize());
 // session config
 server.use(session({ secret: "f493bd7f94854f1899fe3cbf77110568b", cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
 
-server.use(express.static(__dirname + "/public"));
+server.use(express.static(__dirname + "/../public"));
 
 /**
 * Routes module handles all route rendering
