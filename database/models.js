@@ -8,6 +8,7 @@ const validators = require('mongoose-validator');
 const uniqueValidator = require('mongoose-unique-validator');
 const crypto = require("crypto");
 const Random = require('random-js');
+const jwt = require('jsonwebtoken');
 
 const mt = Random.engines.mt19937();
 
@@ -143,21 +144,19 @@ UserSchema.methods.checkPassword = function(password) {
 	return this.has === candidateHash;
 }
 
-UserSchema.methods.setToken = function() {
-	let token = crypto.randomBytes(16).toString('hex');
-	this.tokens.push(token);
-	if (this.tokens.length > 30) {
-		this.tokens.shift();
-	}
-	return token;
+UserSchema.methods.generateJWT = function() {
+	const today = new Date();
+	const expirationDate = new Date(today);
+	expirationDate.setDate(today.getDate() + 60);
 }
 
-UserSchema.methods.unsetToken = function(token) {
-	let index = this.tokens.indexOf(token);
-	if (index >= 0) {
-		this.tokens.splice(index, 1);
+UserSchema.methods.toAuthJSON = function() {
+	return {
+		_id: this._id,
+		email:this.email,
+		token: this.generateJWT(),
+		permissions: this.permissions
 	}
-	return index >= 0;
 }
 
 mongoose.model("User", UserSchema);

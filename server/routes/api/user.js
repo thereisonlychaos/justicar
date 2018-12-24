@@ -9,6 +9,7 @@ const User = mongoose.model('User');
 // Create new user
 
 router.post('/', auth.optional, (req, res, next) => {
+  // @TODO get registration process
   const { body: { user }} = req;
 
   if(!user.username) {
