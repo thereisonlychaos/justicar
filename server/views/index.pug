@@ -1,5 +1,7 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  div(layout="column", flex)
+    include sidenav.pug
+    include toolbar.pug
+    md-content(flex, layout="column", ui-view="")
