@@ -15,15 +15,15 @@ angular.module('Justicar.WebClient', [
     // Angular Libraries
     'ngMaterial', // angular-material
     'ngSanitize', // angular-sanitize
+    'ngResource', // angular-resource
     'ngAnimate', // angular-animate
     'angularMoment',
     'angular.filter',
     'LocalStorageModule', // angular-local-storage
-    'ngCookies',
     'ui.router',
 
     // Local modules
-    'Justicar.Webclient.API',
+    'Justicar.WebClient.API',
 
 ]).config([
     '$locationProvider',
@@ -199,10 +199,9 @@ angular.module('Justicar.WebClient', [
 ]).run([
     '$rootScope',
     '$log',
-    '$translate',
     '$transitions',
     'JusticarAPI',
-    function($rootScope, $log, $translate, $transitions, JusticarAPI) {
+    function($rootScope, $log, $transitions, JusticarAPI) {
 
     }
 

@@ -2,7 +2,7 @@
  * @namespace Justicar.WebClient.API
  * sets up the API configuration
  */
-let moduleAPI = angular.module("Justicar.WebClient.API", {});
+let moduleAPI = angular.module("Justicar.WebClient.API", ['ngResource']);
 
 /**
  * Stores base URL for api

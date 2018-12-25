@@ -1,7 +1,8 @@
 extends layout
 
 block content
-  div(layout="column", flex)
+  div(layout="row", layout-fill)
     include sidenav.pug
-    include toolbar.pug
-    md-content(flex, layout="column", ui-view="")
+    div(layout="column", layout-fill, flex)
+      include toolbar.pug
+      md-content(flex, layout="column", ui-view="")
