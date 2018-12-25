@@ -17,44 +17,44 @@ moduleAPI.service("JusticarAuth", ['$http', '$resource', '$log', '$q', 'Justicar
        */
       JusticarAuth.login = function(email, password) {
         // @TODO
-      }
+      };
 
       /**
        * Logout of system
        */
       JusticarAuth.logout = function() {
         // @TODO
-      }
+      };
 
       /**
        * Register new user
        */
       JusticarAuth.register = function(email, password, userDetails) {
 
-      }
+      };
 
       /**
        * Open modal panel for logging inspect
        */
       JusticarAuth.openLoginPanel = function() {
 
-      }
+      };
 
       /**
        * Open registration panel
        */
       JusticarAuth.openRegisterPanel = function() {
 
-      }
+      };
 
       /**
        * Check permissions based on a string
        */
       JusticarAuth.checkPermissions = function(permission) {
 
-      }
+      };
 
 
-      return JusticarAPI;
+      return JusticarAuth;
   }
 ]);
