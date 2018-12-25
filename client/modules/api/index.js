@@ -10,7 +10,7 @@ let moduleAPI = angular.module("Justicar.WebClient.API", ['ngResource']);
 moduleAPI.constant("API_URL", "http://127.0.0.1/api");
 
 moduleAPI.service("JusticarAPI", ['$http', '$resource', '$log', '$q', 'API_URL',
-  function($http, $resource, $log, $rq, API_URL) {
+  function($http, $resource, $log, $q, API_URL) {
       let JusticarAPI = {};
 
 
