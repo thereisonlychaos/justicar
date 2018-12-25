@@ -1,0 +1,21 @@
+div(role="dialog", aria-label="Login", layout="column")
+  md-toolbar
+    div.md-toolbar-tools
+      h3 Login
+  div(layout="column", style="padding:15px;")
+    form(name="loginForm")
+      md-input-container.md-block
+        label Email
+        input(required, type="email", name="userEmail", ng-model="userEmail")
+        div(ng-messages="loginForm.userEmail.$error", role="alert")
+          div(ng-message-exp="['required','pattern']") Valid email address is required
+      md-input-container.md-block
+        label Password
+        input(required, type="password", name="userPassword", ng-model="userPassword")
+        div(ng-messages="loginForm.userPassword.$error", role="alert")
+          div(ng-message-exp="['required']") Password is required
+      div
+        md-button.md-primary(type="submit", ng-click="onClickLogin()") Login
+    div
+      p Don't have a login?
+      md-button(ng-click="onClickRegister()") Register
