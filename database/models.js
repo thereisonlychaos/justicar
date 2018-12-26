@@ -97,7 +97,6 @@ var nameValidator = [
 ];
 
 const UserSchema = new mongoose.Schema({
-	username: {type: String, lowercase: true, unique: true, required: true, index: true, validate: nameValidator },
 	email: {type: String, lowercase: true, unique: true, required: true, index: true, validate: validators({ validator: 'isEmail'}) },
 
 	// login and password

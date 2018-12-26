@@ -12,10 +12,10 @@ router.post('/register', auth.optional, (req, res, next) => {
   // @TODO get registration process
   const { body: { user }} = req;
 
-  if(!user.username) {
+  if(!user.email) {
     return res.status(422).json({
       errors: {
-        username: 'is required'
+        email: 'is required'
       }
     });
   }
@@ -41,10 +41,10 @@ Login
 router.post('/login', auth.optional, (req,res,next) => {
   const { body: { user }} = req;
 
-  if(!user.username) {
+  if(!user.email) {
     return res.status(422).json({
       errors: {
-        username: 'is required'
+        email: 'is required'
       }
     });
   }

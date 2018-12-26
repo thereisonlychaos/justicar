@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 
 passport.use(
 	new LocalStrategy(
-		function(username, password, done) {
-			mongoose.model('User').findOne({username: username}).then(
+		function(email, password, done) {
+			mongoose.model('User').findOne({email: email}).then(
 				function(user) {
 					if (!user) { return done(null, false); }
 					if (!user.checkPassword(password)) { return done(null, false); }

@@ -13,7 +13,32 @@ moduleAPI.service("JusticarAPI", ['$http', '$resource', '$log', '$q', 'API_URL',
   function($http, $resource, $log, $q, API_URL) {
       let JusticarAPI = {};
 
+      /**
+       * Auth functions used for auth and user management
+       */
+      JusticarAPI.auth = {};
 
+      JusticarAPI.auth.login = function(email, password) {
+        return $http.post(API_URL + "/user/login", {
+          email: email,
+          password: password
+        })
+      };
+
+      JusticarAPI.auth.logout = function() {
+        return $http.post(API_URL + "/user/logout")
+      };
+
+      JusticarAPI.auth.current = function() {
+        return $http.get(API_URL + "/user/current")
+      }
+
+      JusticarAPI.auth.register = function(email, password) {
+        return $http.post(API_URL + "/user/register", {
+          email: email,
+          password: password
+        })
+      };
 
 
 
