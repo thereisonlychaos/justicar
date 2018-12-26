@@ -8,7 +8,7 @@ const User = mongoose.model('User');
 
 // Create new user
 
-router.post('/', auth.optional, (req, res, next) => {
+router.post('/register', auth.optional, (req, res, next) => {
   // @TODO get registration process
   const { body: { user }} = req;
 
@@ -71,6 +71,14 @@ router.post('/login', auth.optional, (req,res,next) => {
 
     return status(400).info;
   })(req, res, next);
+});
+
+/**
+Logout
+**/
+router.post('/logout', auth.optional, (req,res,next) => {
+  req.logout();
+  res.sendStatus(200);
 });
 
 /**
