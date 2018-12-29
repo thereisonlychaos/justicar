@@ -24,6 +24,7 @@ angular.module('Justicar.WebClient', [
 
     // Local modules
     'Justicar.WebClient.API',
+    'Justicar.WebClient.Auth',
 
 ]).config([
     '$locationProvider',

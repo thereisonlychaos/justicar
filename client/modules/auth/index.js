@@ -2,14 +2,14 @@
  * @namespace Justicar.WebClient.Auth
  * handles login and checking permissions
  */
-let moduleAPI = angular.module("Justicar.WebClient.Auth", ['ngResource', 'Justicar.WebClient.API']);
+let moduleAuth = angular.module("Justicar.WebClient.Auth", ['ngResource', 'Justicar.WebClient.API']);
 
 /**
- * Stores base URL for api
+ *
  */
 
-moduleAPI.service("JusticarAuth", ['$http', '$resource', '$log', '$q', 'JusticarAPI',
-  function($http, $resource, $log, $q, JusticarAPI) {
+moduleAuth.service("JusticarAuth", ['$http', '$resource', '$log', '$q', '$mdPanel', 'JusticarAPI',
+  function($http, $resource, $log, $q, $mdPanel, JusticarAPI) {
       let JusticarAuth = {};
 
       JusticarAuth.currentUser = null;
@@ -65,15 +65,76 @@ moduleAPI.service("JusticarAuth", ['$http', '$resource', '$log', '$q', 'Justicar
       /**
        * Open modal panel for logging inspect
        */
-      JusticarAuth.openLoginPanel = function() {
+      JusticarAuth.openLoginPanel = function($event) {
+        let deferred = $q.defer();
 
+        let panelPosition = $mdPanel.newPanelPosition()
+          .absolute()
+          .top('50%')
+          .left('50%');
+
+        let panelAnimation = $mdPanel.newPanelAnimation()
+          .openFrom($event)
+          .duration(200)
+          .closeTo('.justicar-login')
+          .withAnimation($mdPanel.animation.SCALE);
+
+        let panelConfig = {
+          attachTo: angular.element(document.body),
+          controller: 'LoginCtrl',
+          disableParentScroll: true,
+          templateUrl: '/views/panels/login',
+          panelClass: "justicar-panel",
+          zIndex: 150,
+          locals: {
+            deferred: deferred
+          },
+          trapFocus: true,
+          clickOutsideToClose: true,
+          clickEscapeToClose: true,
+          hasBackdrop: true
+        }
+
+        $mdPanel.open(panelConfig);
+
+        return deferred.promise;
       };
 
       /**
        * Open registration panel
        */
       JusticarAuth.openRegisterPanel = function() {
+        let deferred = $q.defer();
 
+        let panelPosition = $mdPanel.newPanelPosition()
+          .absolute()
+          .center();
+
+        let panelAnimation = $mdPanel.newPanelAnimation()
+          .openFrom($event)
+          .duration(200)
+          .closeTo('.justicar-login')
+          .withAnimation($mdPanel.animation.SCALE);
+
+        let panelConfig = {
+          attachTo: angular.element(document.body),
+          controller: 'RegisterCtrl',
+          disableParentScroll: true,
+          templateUrl: '/views/panels/register',
+          panelClass: "justicar-panel",
+          zIndex: 150,
+          locals: {
+            deferred: deferred
+          },
+          trapFocus: true,
+          clickOutsideToClose: true,
+          clickEscapeToClose: true,
+          hasBackdrop: true
+        }
+
+        $mdPanel.open(panelConfig);
+
+        return deferred.promise;
       };
 
       /**
@@ -87,3 +148,16 @@ moduleAPI.service("JusticarAuth", ['$http', '$resource', '$log', '$q', 'Justicar
       return JusticarAuth;
   }
 ]);
+
+moduleAuth.controller('LoginCtrl', [
+  function($mdPanel) {
+
+  }
+])
+
+
+moduleAuth.controller('RegisterCtrl', [
+  function($mdPanel) {
+
+  }
+])
