@@ -5,7 +5,7 @@
 
 // Local Angular Modules Only. Plugins and other libraries go in the lib.js folder to make for quicker compiling.
 require('./modules/api/index.js');
-
+require('./modules/auth/index.js');
 
 
 // Define main module
@@ -25,7 +25,6 @@ angular.module('Justicar.WebClient', [
     // Local modules
     'Justicar.WebClient.API',
     'Justicar.WebClient.Auth',
-
 ]).config([
     '$locationProvider',
     '$mdThemingProvider',

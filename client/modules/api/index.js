@@ -40,8 +40,6 @@ moduleAPI.service("JusticarAPI", ['$http', '$resource', '$log', '$q', 'API_URL',
         })
       };
 
-
-
       return JusticarAPI;
   }
 ]);
