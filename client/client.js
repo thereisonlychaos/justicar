@@ -7,6 +7,10 @@
 require('./modules/api/index.js');
 require('./modules/auth/index.js');
 
+// Mixins
+
+// Local State Modules
+require('./states/index.js');
 
 // Define main module
 
@@ -25,6 +29,7 @@ angular.module('Justicar.WebClient', [
     // Local modules
     'Justicar.WebClient.API',
     'Justicar.WebClient.Auth',
+    'Justicar.WebClient.States',
 ]).config([
     '$locationProvider',
     '$mdThemingProvider',
@@ -192,7 +197,7 @@ angular.module('Justicar.WebClient', [
         /**
          * Setting up state machine
          */
-        $urlRouterProvider.otherwise("/");
+        $urlRouterProvider.otherwise("/landing");
 
 
     }
@@ -204,5 +209,16 @@ angular.module('Justicar.WebClient', [
     function($rootScope, $log, $transitions, JusticarAPI) {
 
     }
+]);
 
+angular.module("Justicar.WebClient").controller("MainCtrl", [
+  function($scope, $log, $mdSidenav) {
+    /**
+     * Toggle sidenav on button click
+     */
+    $scope.toggleSidenav = function() {
+      $mdSidenav("sidenav").toggle();
+    };
+
+  }
 ]);

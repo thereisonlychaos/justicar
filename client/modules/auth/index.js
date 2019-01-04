@@ -27,7 +27,7 @@ moduleAuth.service("JusticarAuth", ['$http', '$resource', '$log', '$q', '$mdPane
             // @TODO better handling of results, failed login, etc.
             throw new Error(err);
           }
-        )
+        );
       };
 
       /**
@@ -43,7 +43,7 @@ moduleAuth.service("JusticarAuth", ['$http', '$resource', '$log', '$q', '$mdPane
             // @TODO better handling of results, failed login, etc.
             throw new Error(err);
           }
-        )
+        );
       };
 
       /**
@@ -59,7 +59,7 @@ moduleAuth.service("JusticarAuth", ['$http', '$resource', '$log', '$q', '$mdPane
             // @TODO better handling of results, failed login, etc.
             throw new Error(err);
           }
-        )
+        );
       };
 
       /**
@@ -93,7 +93,7 @@ moduleAuth.service("JusticarAuth", ['$http', '$resource', '$log', '$q', '$mdPane
           clickOutsideToClose: true,
           clickEscapeToClose: true,
           hasBackdrop: true
-        }
+        };
 
         $mdPanel.open(panelConfig);
 
@@ -130,7 +130,7 @@ moduleAuth.service("JusticarAuth", ['$http', '$resource', '$log', '$q', '$mdPane
           clickOutsideToClose: true,
           clickEscapeToClose: true,
           hasBackdrop: true
-        }
+        };
 
         $mdPanel.open(panelConfig);
 
@@ -153,11 +153,11 @@ moduleAuth.controller('LoginCtrl', [
   function($mdPanel) {
 
   }
-])
+]);
 
 
 moduleAuth.controller('RegisterCtrl', [
   function($mdPanel) {
 
   }
-])
+]);

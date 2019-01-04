@@ -22,22 +22,22 @@ moduleAPI.service("JusticarAPI", ['$http', '$resource', '$log', '$q', 'API_URL',
         return $http.post(API_URL + "/user/login", {
           email: email,
           password: password
-        })
+        });
       };
 
       JusticarAPI.auth.logout = function() {
-        return $http.post(API_URL + "/user/logout")
+        return $http.post(API_URL + "/user/logout");
       };
 
       JusticarAPI.auth.current = function() {
-        return $http.get(API_URL + "/user/current")
-      }
+        return $http.get(API_URL + "/user/current");
+      };
 
       JusticarAPI.auth.register = function(email, password) {
         return $http.post(API_URL + "/user/register", {
           email: email,
           password: password
-        })
+        });
       };
 
       return JusticarAPI;
