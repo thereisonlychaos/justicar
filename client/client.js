@@ -211,7 +211,7 @@ angular.module('Justicar.WebClient', [
     }
 ]);
 
-angular.module("Justicar.WebClient").controller("MainCtrl", [
+angular.module("Justicar.WebClient").controller("MainCtrl", ['$scope', '$log', '$mdSidenav',
   function($scope, $log, $mdSidenav) {
     /**
      * Toggle sidenav on button click
