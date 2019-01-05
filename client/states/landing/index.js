@@ -51,5 +51,5 @@ stateLanding.config([
 stateLanding.controller("StateLandingCtrl", [
   function() {
 
-  }  
-])
+  }
+]);
