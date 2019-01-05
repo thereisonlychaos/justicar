@@ -197,7 +197,7 @@ angular.module('Justicar.WebClient', [
         /**
          * Setting up state machine
          */
-        $urlRouterProvider.otherwise("/landing");
+        $urlRouterProvider.otherwise("/start");
 
 
     }
@@ -207,7 +207,7 @@ angular.module('Justicar.WebClient', [
     '$transitions',
     'JusticarAPI',
     function($rootScope, $log, $transitions, JusticarAPI) {
-
+      
     }
 ]);
 
@@ -219,6 +219,5 @@ angular.module("Justicar.WebClient").controller("MainCtrl", ['$scope', '$log', '
     $scope.toggleSidenav = function() {
       $mdSidenav("sidenav").toggle();
     };
-
   }
 ]);
