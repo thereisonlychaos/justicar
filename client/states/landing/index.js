@@ -19,7 +19,7 @@ stateLanding.constant("LANDING_STATE_URL", "/start");
 /**
  * Location to load view from
  */
-stateLanding.constant("LANDING_TEMPLATE_URL", "/states/landing");
+stateLanding.constant("LANDING_TEMPLATE_URL", "/partials/states/landing");
 
 /**
  * Config action that sets up this module

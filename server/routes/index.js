@@ -6,6 +6,9 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: srvConfig.page_title });
 });
 
+router.get('/partials/*?', function(req, res) {
+  res.render('partials/' + req.params[0]);
+});
 
 router.use('/api', require('./api'));
 

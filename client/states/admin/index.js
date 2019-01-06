@@ -17,11 +17,6 @@ stateAdmin.constant("ADMIN_STATE", "admin");
 stateAdmin.constant("ADMIN_STATE_URL", "/admin");
 
 /**
- * Location to load view from
- */
-stateAdmin.constant("ADMIN_TEMPLATE_URL", "/states/admin");
-
-/**
  * Config action that sets up this module
  */
 stateAdmin.config([
