@@ -21,6 +21,7 @@ angular.module('Justicar.WebClient', [
     'ngSanitize', // angular-sanitize
     'ngResource', // angular-resource
     'ngAnimate', // angular-animate
+    'ngMessages', // angular-messages
     'angularMoment',
     'angular.filter',
     'LocalStorageModule', // angular-local-storage
@@ -35,6 +36,8 @@ angular.module('Justicar.WebClient', [
     '$mdThemingProvider',
     '$urlRouterProvider',
     function($locationProvider, $mdThemingProvider, $urlRouterProvider) {
+
+
         /**
          * $locationProvider settings
          */
@@ -207,17 +210,19 @@ angular.module('Justicar.WebClient', [
     '$transitions',
     'JusticarAPI',
     function($rootScope, $log, $transitions, JusticarAPI) {
-      
+
     }
 ]);
 
-angular.module("Justicar.WebClient").controller("MainCtrl", ['$scope', '$log', '$mdSidenav',
-  function($scope, $log, $mdSidenav) {
+angular.module("Justicar.WebClient").controller("MainCtrl", ['$scope', '$log', '$mdSidenav', 'JusticarAuth',
+  function($scope, $log, $mdSidenav, JusticarAuth) {
     /**
      * Toggle sidenav on button click
      */
     $scope.toggleSidenav = function() {
       $mdSidenav("sidenav").toggle();
     };
+
+    JusticarAuth.init();
   }
 ]);

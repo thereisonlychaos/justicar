@@ -17,10 +17,27 @@ moduleAuth.service("JusticarAuth", ['$http', '$resource', '$log', '$q', '$mdPane
       /**
        * Login to system
        */
+      JusticarAuth.init = function() {
+        JusticarAPI.auth.current().then(
+          function(response) {
+            JusticarAuth.currentUser = response.data.user;
+
+          }
+        ).catch(
+          function(err) {
+            JusticarAuth.currentUser = null;
+            JusticarAuth.openLoginPanel();
+          }
+        );
+      };
+
+      /**
+       * Login to system
+       */
       JusticarAuth.login = function(email, password) {
         JusticarAPI.auth.login(email, password).then(
           function(response) {
-            JusticarAuth.currentUser = response.data.user; // this is likely wrong
+            JusticarAuth.currentUser = response.data.user;
           }
         ).catch(
           function(err) {
@@ -36,7 +53,7 @@ moduleAuth.service("JusticarAuth", ['$http', '$resource', '$log', '$q', '$mdPane
       JusticarAuth.logout = function() {
         JusticarAPI.auth.logout().then(
           function() {
-            JusticarAuth.currentUser = null; // this is likely wrong
+            JusticarAuth.currentUser = null;
           }
         ).catch(
           function(err) {
@@ -70,20 +87,19 @@ moduleAuth.service("JusticarAuth", ['$http', '$resource', '$log', '$q', '$mdPane
 
         let panelPosition = $mdPanel.newPanelPosition()
           .absolute()
-          .top('50%')
-          .left('50%');
+          .center();
 
         let panelAnimation = $mdPanel.newPanelAnimation()
-          .openFrom($event)
+          .openFrom({ top: 1, right:0 })
           .duration(200)
-          .closeTo('.justicar-login')
+          .closeTo({ top: 1, right:0 })
           .withAnimation($mdPanel.animation.SCALE);
 
         let panelConfig = {
           attachTo: angular.element(document.body),
           controller: 'LoginCtrl',
           disableParentScroll: true,
-          templateUrl: '/views/panels/login',
+          templateUrl: '/partials/panels/login',
           panelClass: "justicar-panel",
           zIndex: 150,
           locals: {
@@ -92,7 +108,9 @@ moduleAuth.service("JusticarAuth", ['$http', '$resource', '$log', '$q', '$mdPane
           trapFocus: true,
           clickOutsideToClose: true,
           clickEscapeToClose: true,
-          hasBackdrop: true
+          hasBackdrop: true,
+          position: panelPosition,
+          animation: panelAnimation
         };
 
         $mdPanel.open(panelConfig);
@@ -111,25 +129,27 @@ moduleAuth.service("JusticarAuth", ['$http', '$resource', '$log', '$q', '$mdPane
           .center();
 
         let panelAnimation = $mdPanel.newPanelAnimation()
-          .openFrom($event)
+          .openFrom({top: 1, left: 1})
           .duration(200)
-          .closeTo('.justicar-login')
+          .closeTo({top: 1, left: 1})
           .withAnimation($mdPanel.animation.SCALE);
 
         let panelConfig = {
           attachTo: angular.element(document.body),
           controller: 'RegisterCtrl',
           disableParentScroll: true,
-          templateUrl: '/views/panels/register',
+          templateUrl: '/partials/panels/register',
           panelClass: "justicar-panel",
-          zIndex: 150,
+          zIndex: 175,
           locals: {
             deferred: deferred
           },
           trapFocus: true,
           clickOutsideToClose: true,
           clickEscapeToClose: true,
-          hasBackdrop: true
+          hasBackdrop: true,
+          position: panelPosition,
+          animation: panelAnimation
         };
 
         $mdPanel.open(panelConfig);
@@ -141,7 +161,7 @@ moduleAuth.service("JusticarAuth", ['$http', '$resource', '$log', '$q', '$mdPane
        * Check permissions based on a string
        */
       JusticarAuth.checkPermissions = function(permission) {
-
+        // @TODO
       };
 
 
