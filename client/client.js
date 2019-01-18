@@ -48,7 +48,7 @@ angular.module('Justicar.WebClient', [
          * Theming
          */
 
-         $mdThemingProvider.definePalette('justicarPrimary', {
+         $mdThemingProvider.definePalette('justicarWarn', {
            '50': 'ede3e3',
            '100': 'd3baba',
            '200': 'b68c8c',
@@ -118,21 +118,56 @@ angular.module('Justicar.WebClient', [
              '900'
            ]
          });
-         $mdThemingProvider.definePalette('justicarWarn', {
-           '50': 'fffaed',
-           '100': 'fff4d1',
-           '200': 'ffecb3',
-           '300': 'ffe494',
-           '400': 'ffdf7d',
-           '500': 'ffd966',
-           '600': 'ffd55e',
-           '700': 'ffcf53',
-           '800': 'ffca49',
-           '900': 'ffc038',
+         $mdThemingProvider.definePalette('justicarPrimary', {
+           '50': 'f0e8f6',
+           '100': 'dac5e9',
+           '200': 'c29fda',
+           '300': 'aa79cb',
+           '400': '975cc0',
+           '500': '853fb5',
+           '600': '7d39ae',
+           '700': '7231a5',
+           '800': '68299d',
+           '900': '551b8d',
+           'A100': 'e1c6ff',
+           'A200': 'c793ff',
+           'A400': 'ac60ff',
+           'A700': '9f47ff',
+           'contrastDefaultColor': 'light',
+           'contrastDarkColors': [
+             '50',
+             '100',
+             '200',
+             '300',
+             'A100',
+             'A200',
+             'A400'
+           ],
+           'contrastLightColors': [
+             '400',
+             '500',
+             '600',
+             '700',
+             '800',
+             '900',
+             'A700'
+           ]
+         });
+         $mdThemingProvider.definePalette('justicarBackground', {
+           '50': 'fafafc',
+           '100': 'f4f2f8',
+           '200': 'ece9f4',
+           '300': 'e4e0f0',
+           '400': 'dfd9ec',
+           '500': 'd9d2e9',
+           '600': 'd5cde6',
+           '700': 'cfc7e3',
+           '800': 'cac1df',
+           '900': 'c0b6d9',
            'A100': 'ffffff',
            'A200': 'ffffff',
-           'A400': 'fff5e1',
-           'A700': 'ffedc8',
+           'A400': 'ffffff',
+           'A700': 'ffffff',
            'contrastDefaultColor': 'light',
            'contrastDarkColors': [
              '50',
@@ -152,46 +187,11 @@ angular.module('Justicar.WebClient', [
            ],
            'contrastLightColors': []
          });
-         $mdThemingProvider.definePalette('justicarBackground', {
-           '50': 'e0e0e0',
-           '100': 'b3b3b3',
-           '200': '808080',
-           '300': '4d4d4d',
-           '400': '262626',
-           '500': '000000',
-           '600': '000000',
-           '700': '000000',
-           '800': '000000',
-           '900': '000000',
-           'A100': 'a6a6a6',
-           'A200': '8c8c8c',
-           'A400': '737373',
-           'A700': '666666',
-           'contrastDefaultColor': 'light',
-           'contrastDarkColors': [
-             '50',
-             '100',
-             '200',
-             'A100',
-             'A200'
-           ],
-           'contrastLightColors': [
-             '300',
-             '400',
-             '500',
-             '600',
-             '700',
-             '800',
-             '900',
-             'A400',
-             'A700'
-           ]
-         });
 
         $mdThemingProvider.theme('justicar')
             .primaryPalette('justicarPrimary')
             .accentPalette('justicarAccent')
-            .warnPalette('justicarWarn')
+            .warnPalette('justicarWarn');
             .backgroundPalette('justicarBackground');
 
         // setting it as default theme

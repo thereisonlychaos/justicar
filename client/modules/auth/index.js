@@ -169,15 +169,47 @@ moduleAuth.service("JusticarAuth", ['$http', '$resource', '$log', '$q', '$mdPane
   }
 ]);
 
-moduleAuth.controller('LoginCtrl', [
-  function($mdPanel) {
+moduleAuth.controller('LoginCtrl', ['$mdPanel', '$scope',
+  function($mdPanel, $scope) {
+    /**
+     * Handle clicking login button
+     */
+    $scope.clickLogin = function() {
+      // login and close if successful
+    }
 
+    /**
+     * Handle clicking register button
+     */
+    $scope.clickRegister = function() {
+      // open registration window and close this one
+    }
+
+    $scope.clickClose = function() {
+
+    }
   }
 ]);
 
 
 moduleAuth.controller('RegisterCtrl', [
   function($mdPanel) {
+    /**
+     * Handle clicking register button
+     */
+    $scope.clickRegister = function() {
+      // open registration window and close this one
+    }
 
+    /**
+     * Handle clicking login button
+     */
+    $scope.clickLogin = function() {
+      // close this window and move to login panel
+    }
+
+    $scope.clickClose = function() {
+
+    }
   }
 ]);
