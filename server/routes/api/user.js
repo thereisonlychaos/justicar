@@ -21,7 +21,7 @@ router.post('/register', auth.optional, (req, res, next) => {
       }
     });
   }
-  
+
   if(!user.email) {
     return res.status(422).json({
       errors: {
@@ -49,11 +49,11 @@ router.post('/register', auth.optional, (req, res, next) => {
 Login
 **/
 router.post('/login', auth.optional, (req,res,next) => {
-  const { body: { user }} = req;
+  const { body: { username, password }} = req;
 
-  console.log("Attempting to login user:", user);
+  console.log("Attempting to login user:", username);
 
-  if(!user.email) {
+  if(!username) {
     return res.status(422).json({
       errors: {
         email: 'is required'
@@ -61,7 +61,7 @@ router.post('/login', auth.optional, (req,res,next) => {
     });
   }
 
-  if(!user.password) {
+  if(!password) {
     return res.status(422).json({
       errors: {
         password: 'is required'
@@ -69,10 +69,11 @@ router.post('/login', auth.optional, (req,res,next) => {
     });
   }
 
-  return passport.authenticate('local', {session: false}, (err, passportUser, info) => {
-    if (err) {
-      return next(err);
+  return passport.authenticate('local', {session: false}, (error, passportUser, info) => {
+    if (error) {
+      return next(error);
     }
+      console.log("passportUser:", passportUser);
 
     if (passportUser) {
       const user = passportUser;
@@ -81,7 +82,7 @@ router.post('/login', auth.optional, (req,res,next) => {
       return res.json({ user: user.toAuthJSON() });
     }
 
-    return status(400).info;
+    return res.status(400).send({ error, info });
   })(req, res, next);
 });
 
