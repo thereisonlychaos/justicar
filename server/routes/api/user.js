@@ -12,6 +12,8 @@ router.post('/register', auth.optional, (req, res, next) => {
   // @TODO get registration process
   const { body: { user }} = req;
 
+  console.log("Attempting to register user:", user);
+
   if(!user.email) {
     return res.status(422).json({
       errors: {
@@ -40,6 +42,8 @@ Login
 **/
 router.post('/login', auth.optional, (req,res,next) => {
   const { body: { user }} = req;
+
+  console.log("Attempting to login user:", user);
 
   if(!user.email) {
     return res.status(422).json({

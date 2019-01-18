@@ -169,47 +169,83 @@ moduleAuth.service("JusticarAuth", ['$http', '$resource', '$log', '$q', '$mdPane
   }
 ]);
 
-moduleAuth.controller('LoginCtrl', ['$mdPanel', '$scope',
-  function($mdPanel, $scope) {
+moduleAuth.controller('LoginCtrl', ['mdPanelRef', '$scope', '$log', 'JusticarAPI', 'JusticarAuth',
+  function(mdPanelRef, $scope, $log, JusticarAPI, JusticarAuth) {
+    $scope.waiting = false;
+    $scope.errorMssg = "";
     /**
-     * Handle clicking login button
+     * Handle clicking login button, using $scope.userEmail & $scope.userPassword
      */
-    $scope.clickLogin = function() {
+    $scope.onClickLogin = function() {
       // login and close if successful
-    }
+      $scope.waiting = true;
+
+      JusticarAPI.auth.login($scope.userEmail, $scope.userPassword).then(
+        function() {
+          $scope.waiting = false;
+          mdPanelRef.close();
+        }
+      ).catch(
+        function(err) {
+          $log.error(err);
+          $scope.errorMssg = "Error logging in.";
+          $scope.waiting = false;
+          // @TODO better messaging
+        }
+      );
+    };
 
     /**
      * Handle clicking register button
      */
-    $scope.clickRegister = function() {
-      // open registration window and close this one
-    }
+    $scope.onClickRegister = function() {
+      JusticarAuth.openRegisterPanel();
+      mdPanelRef.close();
+    };
 
-    $scope.clickClose = function() {
-
-    }
+    $scope.onClickClose = function() {
+      mdPanelRef.close();
+    };
   }
 ]);
 
 
-moduleAuth.controller('RegisterCtrl', [
-  function($mdPanel) {
+moduleAuth.controller('RegisterCtrl', ['mdPanelRef', '$scope', '$log', 'JusticarAPI', 'JusticarAuth',
+  function(mdPanelRef, $scope, $log, JusticarAPI, JusticarAuth) {
+    $scope.waiting = false;
+    $scope.errorMssg = "";
     /**
      * Handle clicking register button
      */
-    $scope.clickRegister = function() {
-      // open registration window and close this one
-    }
+    $scope.onClickRegister = function() {
+      // login and close if successful
+      $scope.waiting = true;
+
+      JusticarAPI.auth.register($scope.userEmail, $scope.userPassword).then(
+        function() {
+          $scope.waiting = false;
+          mdPanelRef.close();
+        }
+      ).catch(
+        function(err) {
+          $log.error(err);
+          $scope.errorMssg = "Error registering.";
+          $scope.waiting = false;
+          // @TODO better messaging
+        }
+      );
+    };
 
     /**
      * Handle clicking login button
      */
-    $scope.clickLogin = function() {
-      // close this window and move to login panel
-    }
+    $scope.onClickLogin = function() {
+      JusticarAuth.openLoginPanel();
+      mdPanelRef.close();
+    };
 
-    $scope.clickClose = function() {
-
-    }
+    $scope.onClickClose = function() {
+      mdPanelRef.close();
+    };
   }
 ]);

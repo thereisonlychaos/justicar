@@ -3,19 +3,21 @@ div(role="dialog", aria-label="Login", layout="column")
     div.md-toolbar-tools
       h3 Login
   div(layout="column", style="padding:15px;")
+    md-progress-linear(ng-show="waiting", md-mode="indeterminate")
+    div.error(ng-show="errorMssg") {{errorMssg}}
     form(name="loginForm")
       md-input-container.md-block
         label Email
-        input(required, type="email", name="userEmail", ng-model="userEmail")
+        input(required, type="email", name="userEmail", ng-model="userEmail", ng-disabled="waiting")
         div(ng-messages="loginForm.userEmail.$error", role="alert")
           div(ng-message-exp="['required','pattern']") Valid email address is required
       md-input-container.md-block
         label Password
-        input(required, type="password", name="userPassword", ng-model="userPassword")
+        input(required, type="password", name="userPassword", ng-model="userPassword", ng-disabled="waiting")
         div(ng-messages="loginForm.userPassword.$error", role="alert")
           div(ng-message-exp="['required']") Password is required
       div
-        md-button.md-primary(type="submit", ng-click="onClickLogin()") Login
+        md-button.md-primary(type="submit", ng-click="onClickLogin()", ng-disabled="waiting") Login
     div
       p Don't have a login?
-      md-button(ng-click="onClickRegister()") Register
+      md-button(ng-click="onClickRegister()", ng-disabled="waiting") Register

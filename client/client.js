@@ -168,7 +168,7 @@ angular.module('Justicar.WebClient', [
            'A200': 'ffffff',
            'A400': 'ffffff',
            'A700': 'ffffff',
-           'contrastDefaultColor': 'light',
+           'contrastDefaultColor': 'dark',
            'contrastDarkColors': [
              '50',
              '100',
@@ -191,7 +191,7 @@ angular.module('Justicar.WebClient', [
         $mdThemingProvider.theme('justicar')
             .primaryPalette('justicarPrimary')
             .accentPalette('justicarAccent')
-            .warnPalette('justicarWarn');
+            .warnPalette('justicarWarn')
             .backgroundPalette('justicarBackground');
 
         // setting it as default theme
