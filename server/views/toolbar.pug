@@ -1,7 +1,7 @@
 md-toolbar
   div.md-toolbar-tools
     h2(md-truncate, flex) Justicar
-    div.justicar-login(flex="none")
-      md-button
+    div.justicar-login(flex="none", ng-show="showAccount()")
+      md-button(ng-click="onClickAccount()")
         md-icon person
-        span Person Name
+        span {{getAccountName()}}

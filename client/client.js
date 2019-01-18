@@ -7,6 +7,10 @@
 require('./modules/api/index.js');
 require('./modules/auth/index.js');
 
+// Widgets
+require('./widgets/toolbar.js');
+require('./widgets/sidebar.js');
+
 // Mixins
 
 // Local State Modules
@@ -31,6 +35,10 @@ angular.module('Justicar.WebClient', [
     'Justicar.WebClient.API',
     'Justicar.WebClient.Auth',
     'Justicar.WebClient.States',
+
+    // Widgets
+    'Justicar.WebClient.Widgets.Toolbar',
+    'Justicar.WebClient.Widgets.Sidebar'
 ]).config([
     '$locationProvider',
     '$mdThemingProvider',
