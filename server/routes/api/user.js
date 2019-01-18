@@ -11,9 +11,17 @@ const User = mongoose.model('User');
 router.post('/register', auth.optional, (req, res, next) => {
   // @TODO get registration process
   const { body: { user }} = req;
-
+  console.log(req.body);
   console.log("Attempting to register user:", user);
 
+  if(!user) {
+    return res.status(422).json({
+      errors: {
+        user: "is required"
+      }
+    });
+  }
+  
   if(!user.email) {
     return res.status(422).json({
       errors: {

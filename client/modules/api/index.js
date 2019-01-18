@@ -20,8 +20,10 @@ moduleAPI.service("JusticarAPI", ['$http', '$resource', '$log', '$q', 'API_URL',
 
       JusticarAPI.auth.login = function(email, password) {
         return $http.post(API_URL + "/user/login", {
-          email: email,
-          password: password
+          user: {
+            email: email,
+            password: password
+          }
         });
       };
 
@@ -35,8 +37,10 @@ moduleAPI.service("JusticarAPI", ['$http', '$resource', '$log', '$q', 'API_URL',
 
       JusticarAPI.auth.register = function(email, password) {
         return $http.post(API_URL + "/user/register", {
-          email: email,
-          password: password
+          user: {
+            email: email,
+            password: password
+          }
         });
       };
 
