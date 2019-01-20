@@ -28,7 +28,7 @@ angular.module('Justicar.WebClient', [
     'ngMessages', // angular-messages
     'angularMoment',
     'angular.filter',
-    'LocalStorageModule', // angular-local-storage
+    'ngStorage', // ngstorage
     'ui.router',
 
     // Local modules
@@ -233,7 +233,5 @@ angular.module("Justicar.WebClient").controller("MainCtrl", ['$scope', '$log', '
     $scope.toggleSidenav = function() {
       $mdSidenav("sidenav").toggle();
     };
-
-    JusticarAuth.init();
   }
 ]);

@@ -24,7 +24,7 @@ moduleAuth.service("JusticarAuth", ['$http', '$localStorage', '$log', '$q', '$md
           JusticarAuth.clearToken();
         }
 
-        JusticarAPI.auth.current().then(
+        return JusticarAPI.auth.current().then(
           function(response) {
             $localStorage.currentUser.user = response.data.user;
           }
@@ -40,7 +40,7 @@ moduleAuth.service("JusticarAuth", ['$http', '$localStorage', '$log', '$q', '$md
        * Login to system
        */
       JusticarAuth.login = function(email, password) {
-        JusticarAPI.auth.login(email, password).then(
+        return JusticarAPI.auth.login(email, password).then(
           function(response) {
             $localStorage.currentUser = { user: response.data.user, token: response.data.token };
             JusticarAuth.setToken(response.data.token);
@@ -57,7 +57,7 @@ moduleAuth.service("JusticarAuth", ['$http', '$localStorage', '$log', '$q', '$md
        * Logout of system
        */
       JusticarAuth.logout = function() {
-        JusticarAPI.auth.logout().then(
+        return JusticarAPI.auth.logout().then(
           function() {
             delete $localStorage.currentUser;
             JusticarAuth.clearToken();
@@ -195,7 +195,7 @@ moduleAuth.controller('LoginCtrl', ['mdPanelRef', '$scope', '$log', 'JusticarAPI
       // login and close if successful
       $scope.waiting = true;
 
-      JusticarAPI.auth.login($scope.userEmail, $scope.userPassword).then(
+      JusticarAuth.login($scope.userEmail, $scope.userPassword).then(
         function() {
           $scope.waiting = false;
           mdPanelRef.close();
@@ -236,7 +236,7 @@ moduleAuth.controller('RegisterCtrl', ['mdPanelRef', '$scope', '$log', 'Justicar
       // login and close if successful
       $scope.waiting = true;
 
-      JusticarAPI.auth.register($scope.userEmail, $scope.userPassword).then(
+      JusticarAuth.register($scope.userEmail, $scope.userPassword).then(
         function() {
           $scope.waiting = false;
           mdPanelRef.close();

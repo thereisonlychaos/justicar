@@ -115,9 +115,10 @@ router.post('/logout', auth.optional, (req,res,next) => {
 Get current user
 **/
 router.get('/current', auth.required, (req, res, next) => {
-  const { payload: { id } } = req;
+  const { payload: { _id } } = req;
+  console.log(req.payload)
 
-  return User.findById(id)
+  return User.findById(_id)
     .then((user) => {
       if(!user) {
         return res.sendStatus(400);

@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 
 passport.use(
 	new LocalStrategy(
-		function(email, password, done) {
-			mongoose.model('User').findOne({email: email}).then(
+		function(username, password, done) {
+			mongoose.model('User').findOne({email: username}).then(
 				function(user) {
 					console.log(user, "Password: ", password);
 					if (!user) { return done(null, false); }
@@ -19,24 +19,3 @@ passport.use(
 		}
 	)
 );
-
-passport.serializeUser(function(user, done) {
-	mongoose.model('User').findById(user._id).then(function(err, user) {
-		let token = user.setToken();
-		user.save().then(function() {
-			done(null, user);
-		}).catch(function(err) { done(err, null); });
-	}).catch(function(err) {
-		done(err, null);
-	});
-});
-
-passport.deserializeUser(function(token, done) {
-	mongoose.model('User').findOne({tokens:token}).then(
-		function(user) {
-			done(null, user);
-		}
-	).catch(function(err) {
-		done(err);
-	});
-});

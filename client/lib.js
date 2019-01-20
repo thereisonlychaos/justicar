@@ -10,7 +10,7 @@ require('angular-aria');
 require('angular-messages');
 require('angular-resource');
 require('angular-sanitize');
-require('angular-local-storage');
+require('ngstorage');
 require('angular-filter');
 
 require('@uirouter/angularjs'); // formerly angular-ui-router
