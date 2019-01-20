@@ -19,14 +19,14 @@ moduleAuth.service("JusticarAuth", ['$http', '$localStorage', '$log', '$q', '$md
        */
       JusticarAuth.init = function() {
         if ($localStorage.currentUser && $localStorage.currentUser.token) {
-          JusticarAuth.setToken($localStorage.currentUser.token);
+          JusticarAuth.setUser($localStorage.currentUser.user, $localStorage.currentUser.token);
         } else {
           JusticarAuth.clearToken();
         }
 
         return JusticarAPI.auth.current().then(
           function(response) {
-            $localStorage.currentUser.user = response.data.user;
+            JusticarAuth.setUser(response.data.user);
           }
         ).catch(
           function(err) {
@@ -42,8 +42,7 @@ moduleAuth.service("JusticarAuth", ['$http', '$localStorage', '$log', '$q', '$md
       JusticarAuth.login = function(email, password) {
         return JusticarAPI.auth.login(email, password).then(
           function(response) {
-            $localStorage.currentUser = { user: response.data.user, token: response.data.token };
-            JusticarAuth.setToken(response.data.token);
+            JusticarAuth.setUser(response.data.user, response.data.token);
           }
         ).catch(
           function(err) {
@@ -59,8 +58,7 @@ moduleAuth.service("JusticarAuth", ['$http', '$localStorage', '$log', '$q', '$md
       JusticarAuth.logout = function() {
         return JusticarAPI.auth.logout().then(
           function() {
-            delete $localStorage.currentUser;
-            JusticarAuth.clearToken();
+            JusticarAuth.clearUser();
           }
         ).catch(
           function(err) {
@@ -76,8 +74,7 @@ moduleAuth.service("JusticarAuth", ['$http', '$localStorage', '$log', '$q', '$md
       JusticarAuth.register = function(email, password) {
         JusticarAPI.auth.register(email, password).then(
           function(response) {
-            $localStorage.currentUser = { user: response.data.user, token: response.data.token };
-            JusticarAuth.setToken(response.data.token);
+            JusticarAuth.setUser(response.data.user, response.data.token);
           }
         ).catch(
           function(err) {
@@ -172,11 +169,22 @@ moduleAuth.service("JusticarAuth", ['$http', '$localStorage', '$log', '$q', '$md
         // @TODO
       };
 
-      JusticarAuth.setToken = function(token) {
-        $http.defaults.headers.common.Authorization = 'Bearer ' + token;
+      /**
+       * Set token in headers
+       */
+      JusticarAuth.setUser = function(user, optionalToken) {
+        let token = optionalToken || false;
+        $localStorage.currentUser = { user, token };
+        if (token) {
+          $http.defaults.headers.common.Authorization = 'Bearer ' + token;
+        }
       };
 
-      JusticarAuth.clearToken = function() {
+      /**
+       * Remove local token
+       */
+      JusticarAuth.clearUser = function() {
+        delete $localStorage.currentUser;
         $http.defaults.headers.common.Authorization =  '';
       };
 

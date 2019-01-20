@@ -11,8 +11,6 @@ const User = mongoose.model('User');
 router.post('/register', auth.optional, (req, res, next) => {
   // @TODO get registration process
   const { body: { user }} = req;
-  console.log(req.body);
-  console.log("Attempting to register user:", user);
 
   if(!user) {
     return res.status(422).json({
@@ -61,8 +59,6 @@ Login
 **/
 router.post('/login', auth.optional, (req,res,next) => {
   const { body: { username, password }} = req;
-
-  console.log("Attempting to login user:", username);
 
   if(!username) {
     return res.status(422).json({
@@ -116,7 +112,6 @@ Get current user
 **/
 router.get('/current', auth.required, (req, res, next) => {
   const { payload: { _id } } = req;
-  console.log(req.payload)
 
   return User.findById(_id)
     .then((user) => {
