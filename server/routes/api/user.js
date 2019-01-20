@@ -41,8 +41,19 @@ router.post('/register', auth.optional, (req, res, next) => {
   const finalUser = new User(user);
 
   finalUser.setPassword(user.password);
+  let token = passportUser.generateJWT();
 
-  return finalUser.save().then(() => res.json({ user: finalUser.toAuthJSON() }));
+  return finalUser.save().then(
+    () => res.json({
+      token,
+      user: finalUser.toAuthJSON()
+    }),
+    (err) => res.status(422).json({
+      errors: {
+        database: err
+      }
+    })
+  );
 });
 
 /**
@@ -73,13 +84,19 @@ router.post('/login', auth.optional, (req,res,next) => {
     if (error) {
       return next(error);
     }
-      console.log("passportUser:", passportUser);
 
     if (passportUser) {
       const user = passportUser;
-      user.token = passportUser.generateJWT();
+      let token = passportUser.generateJWT();
 
-      return res.json({ user: user.toAuthJSON() });
+      return user.save().then(
+        () => res.json({ user: user.toAuthJSON(), token }),
+        (err) => res.status(422).json({
+          errors: {
+            database: err
+          }
+        })
+      );
     }
 
     return res.status(400).send({ error, info });

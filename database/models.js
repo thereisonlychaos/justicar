@@ -98,7 +98,7 @@ var nameValidator = [
 
 const UserSchema = new mongoose.Schema({
 	email: {type: String, lowercase: true, unique: true, required: true, index: true, validate: validators({ validator: 'isEmail'}) },
-
+	name: {type: String, default: ""},
 	// login and password
 	hash: String,
 	salt: String,
@@ -135,18 +135,33 @@ UserSchema.plugin(uniqueValidator);
 
 UserSchema.methods.setPassword = function(password) {
 	this.salt = crypto.randomBytes(16).toString('hex');
-	this.hash = crypto.pbkdf2Sync(password, this.salt, hashIterations, hashLength, hashDigest);
+	this.hash = crypto.pbkdf2Sync(password, this.salt, hashIterations, hashLength, hashDigest).toString('hex');
 }
 
 UserSchema.methods.checkPassword = function(password) {
-	let candidateHash = crypto.pbkdf2Sync(password, this.salt, hashIterations, hashLength, hashDigest);
-	return this.has === candidateHash;
+	console.log("checking password:", password);
+	let candidateHash = crypto.pbkdf2Sync(password, this.salt, hashIterations, hashLength, hashDigest).toString('hex');
+	console.log("candidateHash:", candidateHash);
+
+	console.log(" this.hash :",  this.hash );
+	return this.hash === candidateHash;
 }
 
 UserSchema.methods.generateJWT = function() {
 	const today = new Date();
 	const expirationDate = new Date(today);
 	expirationDate.setDate(today.getDate() + 60);
+
+	return jwt.sign({
+		_id: this._id,
+		email: this.email,
+		name: this.name,
+		exp: parseInt(expirationDate.getTime() / 1000)
+	}, "MY_SECRET"); // @TODO !!!!!! REPLACE THIS !!!!!!
+}
+
+UserSchema.methods.getPermissions = function() {
+	return this.permissions; // @TODO make this a real permissions call
 }
 
 UserSchema.methods.toAuthJSON = function() {
@@ -154,7 +169,7 @@ UserSchema.methods.toAuthJSON = function() {
 		_id: this._id,
 		email:this.email,
 		token: this.generateJWT(),
-		permissions: this.permissions
+		permissions: this.getPermissions()
 	}
 }
 

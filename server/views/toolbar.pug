@@ -1,7 +1,9 @@
-md-toolbar
+md-toolbar(ng-controller="WidgetToolbarCtrl")
   div.md-toolbar-tools
     h2(md-truncate, flex) Justicar
-    div.justicar-login(flex="none", ng-show="showAccount()")
+    div.justicar-login(flex="none", ng-show="!bShowAccount()")
+      md-button(ng-click="onClickLogin()") Log In
+    div.justicar-login(flex="none", ng-show="bShowAccount()")
       md-button(ng-click="onClickAccount()")
         md-icon person
         span {{getAccountName()}}

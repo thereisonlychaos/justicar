@@ -216,9 +216,12 @@ angular.module('Justicar.WebClient', [
     '$rootScope',
     '$log',
     '$transitions',
-    'JusticarAPI',
-    function($rootScope, $log, $transitions, JusticarAPI) {
-
+    'JusticarAuth',
+    function($rootScope, $log, $transitions, JusticarAuth) {
+      /**
+       * Initialize user credentials
+       */
+       JusticarAuth.init();
     }
 ]);
 

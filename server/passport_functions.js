@@ -7,6 +7,7 @@ passport.use(
 		function(email, password, done) {
 			mongoose.model('User').findOne({email: email}).then(
 				function(user) {
+					console.log(user, "Password: ", password);
 					if (!user) { return done(null, false); }
 					if (!user.checkPassword(password)) { return done(null, false); }
 					return done(null, user);
