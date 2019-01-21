@@ -138,11 +138,8 @@ UserSchema.methods.setPassword = function(password) {
 }
 
 UserSchema.methods.checkPassword = function(password) {
-	console.log("checking password:", password);
 	let candidateHash = crypto.pbkdf2Sync(password, this.salt, hashIterations, hashLength, hashDigest).toString('hex');
-	console.log("candidateHash:", candidateHash);
 
-	console.log(" this.hash :",  this.hash );
 	return this.hash === candidateHash;
 }
 

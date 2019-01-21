@@ -188,6 +188,8 @@ moduleAuth.service("JusticarAuth", ['$http', '$localStorage', '$log', '$q', '$md
         if (token) {
           $http.defaults.headers.common.Authorization = 'Bearer ' + token;
         }
+
+        JusticarAuth.pending = false;
       };
 
       /**
