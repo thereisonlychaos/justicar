@@ -12,6 +12,7 @@ moduleAuth.service("JusticarAuth", ['$http', '$localStorage', '$log', '$q', '$md
   function($http, $localStorage, $log, $q, $mdPanel, JusticarAPI) {
       let JusticarAuth = {};
 
+      JusticarAuth.pending = true;
 
 
       /**
@@ -21,11 +22,12 @@ moduleAuth.service("JusticarAuth", ['$http', '$localStorage', '$log', '$q', '$md
         if ($localStorage.currentUser && $localStorage.currentUser.token) {
           JusticarAuth.setUser($localStorage.currentUser.user, $localStorage.currentUser.token);
         } else {
-          JusticarAuth.clearToken();
+          JusticarAuth.clearUser();
         }
 
         return JusticarAPI.auth.current().then(
           function(response) {
+            JusticarAuth.pending = false;
             JusticarAuth.setUser(response.data.user);
           }
         ).catch(
@@ -36,10 +38,18 @@ moduleAuth.service("JusticarAuth", ['$http', '$localStorage', '$log', '$q', '$md
         );
       };
 
+      JusticarAuth.bLoggedIn = function() {
+        if (JusticarAuth.pending) return false;
+        if ($localStorage.currentUser) return true;
+
+        return false;
+      }
+
       /**
        * Login to system
        */
       JusticarAuth.login = function(email, password) {
+        JusticarAuth.pending = true;
         return JusticarAPI.auth.login(email, password).then(
           function(response) {
             JusticarAuth.setUser(response.data.user, response.data.token);
@@ -186,6 +196,25 @@ moduleAuth.service("JusticarAuth", ['$http', '$localStorage', '$log', '$q', '$md
       JusticarAuth.clearUser = function() {
         delete $localStorage.currentUser;
         $http.defaults.headers.common.Authorization =  '';
+      };
+
+      /**
+       * Get user details
+       */
+      JusticarAuth.getDisplayName = function() {
+        if (JusticarAuth.pending) {
+          return "Loading...";
+        }
+
+        if ($localStorage.currentUser) {
+            if ($localStorage.currentUser.user.name) {
+              return $localStorage.currentUser.user.name;
+            }
+
+            return $localStorage.currentUser.user.email;
+        }
+
+        return "";
       };
 
       return JusticarAuth;

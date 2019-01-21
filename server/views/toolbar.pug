@@ -1,9 +1,17 @@
 md-toolbar(ng-controller="WidgetToolbarCtrl")
   div.md-toolbar-tools
     h2(md-truncate, flex) Justicar
-    div.justicar-login(flex="none", ng-show="!bShowAccount()")
-      md-button(ng-click="onClickLogin()") Log In
-    div.justicar-login(flex="none", ng-show="bShowAccount()")
-      md-button(ng-click="onClickAccount()")
-        md-icon person
-        span {{getAccountName()}}
+    div.justicar-login(flex="none", ng-show="bAuthPending()")
+      md-progress-circular.md-accent(md-diameter="15")
+    div.justicar-login(flex="none", ng-show="!bLoggedIn() && !bAuthPending()")
+      md-button(ng-click="onClickLogIn()") Log In
+    div.justicar-login(flex="none", ng-show="bLoggedIn() && !bAuthPending()")
+      md-menu
+        md-button(ng-click="$mdMenu.open()")
+          md-icon person
+          |  {{getDisplayName()}}
+        md-menu-content(width="4")
+          md-menu-item(ui-sref="")
+            md-button View Profile
+          md-menu-item(ng-click="onClickLogOut()")
+            md-button Log Out

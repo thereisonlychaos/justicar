@@ -13,21 +13,25 @@ let widgetToolbar = angular.module("Justicar.WebClient.Widgets.Toolbar", [
  */
 widgetToolbar.controller("WidgetToolbarCtrl", ['$scope', 'JusticarAuth',
   function($scope, JusticarAuth) {
-    $scope.bShowAccount = function() {
+    $scope.bAuthPending = function() {
+      return JusticarAuth.pending;
+    }
+
+    $scope.bLoggedIn = function() {
       // is there a valid account?
-      return false;
+      return JusticarAuth.bLoggedIn();
     };
 
-    $scope.onClickLogin = function() {
+    $scope.onClickLogIn = function() {
       JusticarAuth.openLoginPanel();
     };
 
-    $scope.onClickAccount = function() {
-      // @TODO
+    $scope.onClickLogOut = function() {
+      JusticarAuth.logout();
     };
 
-    $scope.getAccountName = function() {
-
+    $scope.getDisplayName = function() {
+      return JusticarAuth.getDisplayName();
     };
   }
 ]);

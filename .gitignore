@@ -8,7 +8,7 @@ lib
 *.sublime-*
 .sass-cache*
 
-public/app.js
-public/lib.js
-public/app.css
-public/app.css.map
+./public/app.js
+./public/lib.js
+./public/app.css
+./public/app.css.map

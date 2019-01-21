@@ -127,8 +127,7 @@ const UserSchema = new mongoose.Schema({
 		canCreateChannels: {type: Boolean, default: false },
 		canModifyChannels: {type: Boolean, default: false}
 	},
-	isSuperUser: { type: Boolean, default: false },
-	tokens: [{ type: String }]
+	isSuperUser: { type: Boolean, default: false }
 }, {timestamps: true})
 
 UserSchema.plugin(uniqueValidator);
