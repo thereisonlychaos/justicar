@@ -43,7 +43,7 @@ moduleAuth.service("JusticarAuth", ['$http', '$localStorage', '$log', '$q', '$md
         if ($localStorage.currentUser) return true;
 
         return false;
-      }
+      };
 
       /**
        * Login to system

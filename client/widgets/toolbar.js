@@ -15,7 +15,7 @@ widgetToolbar.controller("WidgetToolbarCtrl", ['$scope', 'JusticarAuth',
   function($scope, JusticarAuth) {
     $scope.bAuthPending = function() {
       return JusticarAuth.pending;
-    }
+    };
 
     $scope.bLoggedIn = function() {
       // is there a valid account?

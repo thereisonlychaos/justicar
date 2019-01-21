@@ -10,14 +10,16 @@ const getTokenFromHeaders = (req) => {
   return null;
 };
 
+console.log("SECRET:", process.env.SECRET);
+
 const auth = {
   required: jwt({
-    secret: 'MY_SECRET',
+    secret: process.env.SECRET,
     userProperty: 'payload',
     getToken: getTokenFromHeaders
   }),
   optional: jwt({
-    secret: 'MY_SECRET',
+    secret: process.env.SECRET,
     userProperty: 'payload',
     getToken: getTokenFromHeaders,
     credentialsRequired: false

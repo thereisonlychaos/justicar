@@ -156,7 +156,7 @@ UserSchema.methods.generateJWT = function() {
 		email: this.email,
 		name: this.name,
 		exp: parseInt(expirationDate.getTime() / 1000)
-	}, "MY_SECRET"); // @TODO !!!!!! REPLACE THIS !!!!!!
+	}, process.env.SECRET);
 }
 
 UserSchema.methods.getPermissions = function() {
