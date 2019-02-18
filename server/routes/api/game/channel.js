@@ -4,44 +4,89 @@ const router = require('express').Router();
 const auth = require('../../auth');
 const Record = mongoose.model('Channel');
 
-router.route('/')
-  .get(auth.required, getAll)
-  .post(auth.required, createNew)
-;
+/**
+ * Define controller
+ */
 
-function getAll(req, res, next) {
-  Record.find({}).then(
-    (list) => {
-      res.json(list);
+let recordCtrl = {};
+
+// List all records
+recordCtrl.list = function(req, res, next) {
+  Record.find({}, (err, list) => {
+      if (err)
+        res.status(500).send(err);
+      res.status(200).json(list);
     }
   );
-}
+};
 
-function createNew(req, res, next) {
+// Create new record
+recordCtrl.create = function(req, res, next) {
   let new_record = new Record(req.body);
 
-  new_record.save().then(
+  new_record.save(
     (err, saved_record) => {
-      if (err) {
-        res.status(500).send(err);
-      }
-
-      res.json(saved_record);
+      if (err)
+        res.status(500).json(err);
+      res.status(201).json(saved_record);
     }
   );
-}
+};
 
-function getOne(req, res, next) {
+// get one record by id
+recordCtrl.show = function(req, res, next) {
+  Record.findById(req.params.id,
+    (err, record) => {
+      if (err)
+        res.status(500).json(err);
+      res.status(200).json(record);
+    }
+  );
+};
 
-}
+// update one record
+recordCtrl.update = function(req, res, next) {
+  Record.findOneAndUpdate(
+    {_id: req.params.id},
+    req.body,
+    {new:true},
+    (err, record) => {
+      if (err)
+        res.status(500).json(err);
+      res.status(200).json(record);
+    }
+  );
+};
 
-function updateOne(req, res, next) {
+// delete one record
+recordCtrl.remove = function(req, res, next) {
+  Record.remove(
+    {_id: req.params.id},
+    req.body,
+    {new:true}
+  ).then(
+    (err) => {
+      if (err)
+        res.status(500).json(err);
+      res.status(200).json({ message: "record successfully deleted"});
+    }
+  );
+};
 
-}
+/**
+ * Define routes
+ */
+router.route('/')
+  .get(auth.required, recordCtrl.list)
+  .post(auth.required, recordCtrl.create)
+;
 
-function deleteOne(req, res, next) {
-
-}
-
+router.route('/:id')
+  .all(auth.required)
+  .get(recordCtrl.show)
+  .post(recordCtrl.update)
+  .put(recordCtrl.update)
+  .delete(recordCtrl.remove)
+;
 
 module.exports = router;
