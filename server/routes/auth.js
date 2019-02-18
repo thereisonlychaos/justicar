@@ -10,8 +10,6 @@ const getTokenFromHeaders = (req) => {
   return null;
 };
 
-console.log("SECRET:", process.env.SECRET);
-
 const auth = {
   required: jwt({
     secret: process.env.SECRET,

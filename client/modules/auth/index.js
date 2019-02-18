@@ -82,7 +82,7 @@ moduleAuth.service("JusticarAuth", ['$http', '$localStorage', '$log', '$q', '$md
        * Register new user
        */
       JusticarAuth.register = function(email, password) {
-        JusticarAPI.auth.register(email, password).then(
+        return JusticarAPI.auth.register(email, password).then(
           function(response) {
             JusticarAuth.setUser(response.data.user, response.data.token);
           }

@@ -39,7 +39,7 @@ router.post('/register', auth.optional, (req, res, next) => {
   const finalUser = new User(user);
 
   finalUser.setPassword(user.password);
-  let token = passportUser.generateJWT();
+  let token = finalUser.generateJWT();
 
   return finalUser.save().then(
     () => res.json({
