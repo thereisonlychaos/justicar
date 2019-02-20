@@ -1,1 +1,7 @@
-h3 channels
+div(layout="column")
+  div(style="padding:10px;background-color:#fae;", layout="row", layout-align="start center")
+    div(flex, style="font-size:1.2em;font-weight:bold;") Channels
+    div(flex="none")
+      md-button.md-raised.md-primary(ng-click="clickAdd()")
+        md-icon add
+        |  Add Channel

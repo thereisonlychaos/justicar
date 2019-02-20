@@ -48,8 +48,32 @@ stateAdminChannels.config([
 /**
  * Controller for state
  */
-stateAdminChannels.controller("StateAdminChannelsCtrl", [
-  function() {
+stateAdminChannels.controller("StateAdminChannelsCtrl", ['JusticarAPI', '$scope',
+  function(JusticarAPI, $scope) {
+    $scope.loading = true;
+    $scope.channels = [];
 
+    function load() {
+      $scope.loading = true;
+      $scope.channels = JusticarAPI.resources.channel.query();
+
+      $scope.channels.$promise.then(function() {
+        $scope.loading = false;
+      })
+    };
+
+    load();
+
+    $scope.clickAdd = function() {
+
+    };
+
+    $scope.clickEdit = function() {
+
+    };
+
+    $scope.clickDelete = function() {
+
+    };
   }
 ]);
