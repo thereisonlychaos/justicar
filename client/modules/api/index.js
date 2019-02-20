@@ -43,6 +43,15 @@ moduleAPI.service("JusticarAPI", ['$http', '$resource', '$log', '$q', 'API_URL',
         });
       };
 
+      /**
+       * Resources API
+       */
+      JusticarAPI.resources = {
+        channel: $resource("/api/game/channel/:id"),
+        character: $resource("/api/character/character/:id"),
+        weather: $resource("/api/game/weather/:id")
+      };
+
       return JusticarAPI;
   }
 ]);

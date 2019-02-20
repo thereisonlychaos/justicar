@@ -82,7 +82,7 @@ router.route('/')
 ;
 
 router.route('/:id')
-  .all(auth.required)
+  .all(auth.required) // @TODO Upgrade this to better control
   .get(recordCtrl.show)
   .post(recordCtrl.update)
   .put(recordCtrl.update)

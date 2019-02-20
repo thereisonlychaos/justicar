@@ -1,9 +1,11 @@
+require('./channels.js');
 /**
  * @namespace Justicar.WebClient.States.Admin
  * Stores all the states for the Angular UI router state machine and associates controllers
  */
 let stateAdmin = angular.module("Justicar.WebClient.States.Admin", [
-  'ui.router'
+  'ui.router',
+  'Justicar.WebClient.States.Admin.Channels'
 ]);
 
 /**
