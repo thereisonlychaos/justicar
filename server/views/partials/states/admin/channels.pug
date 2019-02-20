@@ -5,3 +5,10 @@ div(layout="column")
       md-button.md-raised.md-primary(ng-click="clickAdd()")
         md-icon add
         |  Add Channel
+  md-progress-linear(md-mode="indeterminate", ng-show="loading")
+  md-content(flex)
+    div(layout="column")
+      div(ng-repeat="channel in channels")
+        div {{channel.name}}
+        div {{channel.description}}
+        div Secret: {{channel.secret}}
