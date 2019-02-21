@@ -14,13 +14,12 @@ moduleAuth.service("JusticarAuth", ['$http', '$localStorage', '$log', '$q', '$md
 
       JusticarAuth.pending = true;
 
-
       /**
        * Login to system
        */
       JusticarAuth.init = function() {
-        if ($localStorage.currentUser && $localStorage.currentUser.token) {
-          JusticarAuth.setUser($localStorage.currentUser.user, $localStorage.currentUser.token);
+        if ($localStorage.currentUser && $localStorage.currentUser.user.token) {
+          JusticarAuth.setUser($localStorage.currentUser.user, $localStorage.currentUser.user.token);
         } else {
           JusticarAuth.clearUser();
         }
