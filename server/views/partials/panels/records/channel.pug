@@ -9,11 +9,11 @@ div(role="dialog", aria-label="channel", layout="column")
       md-input-container.md-icon-float.md-block
         label Channel Name
         md-icon #
-        input(ng-model="channel.name", ng-disabled="waiting")
+        input(ng-model="record.name", ng-disabled="waiting")
       md-input-container.md-block
         label Description
-        textarea(ng-model="channel.description", md-maxlength="", rows="3", md-select-on-focus, ng-disabled="waiting")
-      md-checkbox(ng-model="channel.secret", aria-label="Secret Channel", ng-disabled="waiting")
+        textarea(ng-model="record.description", md-maxlength="", rows="3", md-select-on-focus, ng-disabled="waiting")
+      md-checkbox(ng-model="record.secret", aria-label="Secret Channel", ng-disabled="waiting")
         | Secret (Not visible on channel list)
   div(flex="none", layout="row")
     md-button.md-primary(type="submit", ng-click="onClickSave()", ng-disabled="waiting") Save

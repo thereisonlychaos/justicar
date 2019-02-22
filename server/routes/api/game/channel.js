@@ -62,13 +62,10 @@ recordCtrl.update = function(req, res, next) {
 recordCtrl.remove = function(req, res, next) {
   Record.remove(
     {_id: req.params.id},
-    req.body,
-    {new:true}
-  ).then(
     (err) => {
-      if (err)
-        res.status(500).json(err);
-      res.status(200).json({ message: "record successfully deleted"});
+        if (err)
+          res.status(500).json(err);
+        res.status(200).json({ message: "record successfully deleted"});
     }
   );
 };

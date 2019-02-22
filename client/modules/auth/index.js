@@ -236,6 +236,7 @@ moduleAuth.controller('LoginCtrl', ['mdPanelRef', '$scope', '$log', 'JusticarAPI
       JusticarAuth.login($scope.userEmail, $scope.userPassword).then(
         function() {
           $scope.waiting = false;
+          $scope.deferred.resolve();
           mdPanelRef.close();
         }
       ).catch(

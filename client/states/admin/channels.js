@@ -109,7 +109,7 @@ stateAdminChannels.controller("StateAdminChannelsCtrl", ['JusticarAPI', '$scope'
      * Open up panel with blank record
      */
     $scope.clickAdd = function() {
-      openChannelPanel({}).then(
+      openChannelPanel().then(
         function() {
           load();
         },
@@ -123,7 +123,7 @@ stateAdminChannels.controller("StateAdminChannelsCtrl", ['JusticarAPI', '$scope'
      * Open up panel with a channel resource record
      */
     $scope.clickEdit = function(record) {
-      openChannelPanel(record).then(
+      openChannelPanel(angular.copy(record)).then(
         function() {
           load();
         },
@@ -146,7 +146,7 @@ stateAdminChannels.controller("StateAdminChannelsCtrl", ['JusticarAPI', '$scope'
 
       $mdDialog.show(confirm).then(
         function() {
-          return record.delete.$promise;
+          return record.$delete().$promise;
         },
         function() {
           return null;
@@ -165,22 +165,38 @@ stateAdminChannels.controller("StateAdminChannelsCtrl", ['JusticarAPI', '$scope'
 ]);
 
 
-stateAdminChannels.controller('PanelChannelCtrl', ['mdPanelRef', '$scope', '$log', 'JusticarAPI',
-  function(mdPanelRef, $scope, $log, JusticarAPI) {
+stateAdminChannels.controller('PanelChannelCtrl', ['mdPanelRef', '$scope', '$log', 'JusticarAPI', 'deferred', 'record',
+  function(mdPanelRef, $scope, $log, JusticarAPI, deferred, record) {
     $scope.waiting = true;
     $scope.errorMssg = "";
 
     function init() {
+      if (!record) {
+        $scope.record = new JusticarAPI.resources.channel();
+      } else {
+        $scope.record = record;
+      }
+
       $scope.waiting = false; // @TODO finish
     }
     /**
      * Handle clicking login button, using $scope.userEmail & $scope.userPassword
      */
     $scope.onClickSave = function() {
+      $scope.record.$save().then(
+        function() {
+          deferred.resolve();
+          mdPanelRef.close();
+        },
+        function(err) {
+          $log.error(err);
+        }
+      );
       mdPanelRef.close();
     };
 
     $scope.onClickCancel = function() {
+      deferred.resolve();
       mdPanelRef.close();
     };
 

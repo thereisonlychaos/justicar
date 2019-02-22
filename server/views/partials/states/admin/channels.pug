@@ -8,7 +8,14 @@ div(layout="column")
   md-progress-linear(md-mode="indeterminate", ng-show="loading")
   md-content(flex)
     div(layout="column")
-      div(ng-repeat="channel in channels")
-        div {{channel.name}}
-        div {{channel.description}}
-        div Secret: {{channel.secret}}
+      div(ng-repeat="channel in channels | orderBy: 'name'", layout="row", layout-align="start center", style="padding:5px; margin:10px 5px; background-color:white;")
+        div(flex)
+          div(style="font-size:1.1em; font-weight:bold;")  &#35{{channel.name}}
+          div(style="padding:8px;") {{channel.description}}
+          div(style="padding:4px 0px; font-size:0.8em; font-weight:bold;") Secret: {{channel.secret}}
+        div(flex="none")
+          md-button.md-icon-button.md-raised(ng-click="clickEdit(channel)")
+            md-icon edit
+        div(flex="none")
+          md-button.md-icon-button.md-raised(ng-click="clickDelete(channel)")
+            md-icon delete
