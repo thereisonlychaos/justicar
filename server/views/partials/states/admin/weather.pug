@@ -1,0 +1,25 @@
+div(layout="column")
+  div(style="padding:10px;background-color:#fae;", layout="row", layout-align="start center")
+    div(flex, style="font-size:1.2em;font-weight:bold;") Weather
+    div(flex="none")
+      md-button.md-raised.md-primary(ng-click="clickAdd()")
+        md-icon add
+        |  Add Weather
+  md-progress-linear(md-mode="indeterminate", ng-show="loading")
+  md-content(flex)
+    div(layout="column")
+      div(ng-repeat="record in weather", layout="row", layout-align="start center", style="padding:5px; margin:10px 5px; background-color:white;")
+        div(flex)
+          div(style="font-size:1.1em; font-weight:bold;")  {{record.summary}}
+          div(style="padding:8px;") {{record.description}}
+          div(style="padding:4px 0px; font-size:1.2em")
+            span(ng-show="record.season.spring", style="padding-right:10px;") &#127799;
+            span(ng-show="record.season.summer", style="padding-right:10px;") &#127774;
+            span(ng-show="record.season.autumn", style="padding-right:10px;") &#127809;
+            span(ng-show="record.season.winter", style="padding-right:10px;") &#10052;&#65039;
+        div(flex="none")
+          md-button.md-icon-button.md-raised(ng-click="clickEdit(record)")
+            md-icon edit
+        div(flex="none")
+          md-button.md-icon-button.md-raised(ng-click="clickDelete(record)")
+            md-icon delete
