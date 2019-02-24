@@ -20,6 +20,10 @@ class Bot {
 				JusticarIRC.handleCommandMessage(from, to, message);
 			}
 		});
+
+		this._client.addListener('error', function(message) {
+			console.log("\n", chalk.bold.red("IRC Error:"), message, "\n");
+		});
 	}
 
 	get client() {
@@ -42,7 +46,7 @@ class Bot {
 			let targetChannel = stackMessage.channel || to;
 
 			switch(stackMessage.type) {
-				case "Private":					
+				case "Private":
 					myClient.say(targetNick, stackMessage.message);
 					break;
 				case "Notice":
