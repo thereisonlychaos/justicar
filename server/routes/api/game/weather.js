@@ -70,6 +70,22 @@ recordCtrl.remove = function(req, res, next) {
   );
 };
 
+recordCtrl.makeCurrent = function(req, res, next) {
+  Record.update({}, { current: false }, {multi:true},
+    (err) => {
+      if (err) res.status(500).json(err);
+
+      Record.findOneAndUpdate({ _id: req.params.id }, {current: true}, {},
+        (err, record) => {
+            if (err) res.status(500).json(err);
+
+            res.status(200).json(record);
+        }
+      );
+    }
+  );
+};
+
 /**
  * Define routes
  */
@@ -85,5 +101,8 @@ router.route('/:id')
   .put(recordCtrl.update)
   .delete(recordCtrl.remove)
 ;
+
+router.route('/:id/function/makeCurrent')
+  .post(auth.required, recordCtrl.makeCurrent);
 
 module.exports = router;

@@ -8,7 +8,11 @@ div(layout="column")
   md-progress-linear(md-mode="indeterminate", ng-show="loading")
   md-content(flex)
     div(layout="column")
-      div(ng-repeat="record in weather", layout="row", layout-align="start center", style="padding:5px; margin:10px 5px; background-color:white;")
+      div(ng-repeat="record in weather | orderBy:['-current', 'summary']", layout="row", layout-align="start center", style="padding:5px; margin:10px 5px; background-color:white;")
+        div(flex="none")
+          md-button.md-icon-button(ng-click="makeCurrent(record)")
+            md-icon(style="color:#0a0", ng-show="record.current") check_box
+            md-icon(style="color:#999", ng-hide="record.current") check_box_outline_blank
         div(flex)
           div(style="font-size:1.1em; font-weight:bold;")  {{record.summary}}
           div(style="padding:8px;") {{record.description}}

@@ -49,7 +49,14 @@ moduleAPI.service("JusticarAPI", ['$http', '$resource', '$log', '$q', 'API_URL',
       JusticarAPI.resources = {
         channel: $resource("/api/game/channel/:_id", {_id: '@_id'}),
         character: $resource("/api/character/character/:_id", {_id: '@_id'}),
-        weather: $resource("/api/game/weather/:_id", {_id: '@_id'})
+        weather: $resource("/api/game/weather/:_id", {_id: '@_id'},
+          {
+            "makeCurrent": {
+              method: "POST",
+              url: "/api/game/weather/:_id/function/makeCurrent"
+            }
+          }
+        )
       };
 
       return JusticarAPI;

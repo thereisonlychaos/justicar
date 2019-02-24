@@ -11,7 +11,8 @@ const WeatherSchema = new mongoose.Schema({
 		summer: { type: Boolean, default: true },
 		autumn: { type: Boolean, default: true },
 		winter: { type: Boolean, default: true }
-	}
+	},
+	current: false
 }, {timestamps: true});
 
 mongoose.model("Weather", WeatherSchema);

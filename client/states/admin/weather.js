@@ -105,6 +105,19 @@ stateAdminWeather.controller("StateAdminWeatherCtrl", ['JusticarAPI', '$scope', 
 
     load();
 
+    $scope.makeCurrent = function(record) {
+      if (!record.current) {
+        record.$makeCurrent().then(
+          function() {
+            load();
+          },
+          function(err) {
+            $log.error(err);
+          }
+        );
+      }
+    }
+
     /**
      * Open up panel with blank record
      */
