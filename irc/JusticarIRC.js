@@ -5,6 +5,10 @@ let bot = new Bot();
 
 module.exports.bot = bot;
 
+let modules = {
+	"channelManager": require("./modules/channelManager")
+}
+
 let commandHandlers = {};
 commandHandlers["Dice"] = require('./commands/dice');
 
@@ -23,7 +27,7 @@ for (var key in commandHandlers) {
 		handler.commands.forEach(function(command) {
 			if (commandDictionary[command.commandName]) {
 				console.warn("Command", command.commandName, "is already defined.")
-			} else {					
+			} else {
 				console.log(command.format, "-", chalk.grey(command.description));
 				commandDictionary[command.commandName] = command;
 			}
@@ -64,5 +68,19 @@ module.exports.handleCommandMessage = function(from, to, message) {
 			function(err) {
 				console.log("Error processing command", command, " : ", err);
 			});
+	}
+}
+
+/**
+ * Initialize modules
+ */
+
+module.exports.initializeModules = function() {
+	console.log(">>>Starting Modules<<<")
+	for(let key in modules) {
+		if(typeof modules[key].init === "function") {
+			console.log("Initializing module:", key);
+			modules[key].init();
+		}
 	}
 }

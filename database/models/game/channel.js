@@ -13,8 +13,8 @@ const ChannelSchema = new mongoose.Schema({
 	// is it secret? is it safe?
 	secret: { type: Boolean, default: false },
 	// tags for various effects, such as 'indoor', 'ooc', etc.
-	tags: [{type:String}]
-
+	tags: [{type:String}],
+	active: { type: Boolean, default: true }
 }, {timestamps: true});
 
 ChannelSchema.plugin(uniqueValidator, {message: "already exists."});

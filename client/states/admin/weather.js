@@ -116,7 +116,7 @@ stateAdminWeather.controller("StateAdminWeatherCtrl", ['JusticarAPI', '$scope', 
           }
         );
       }
-    }
+    };
 
     /**
      * Open up panel with blank record

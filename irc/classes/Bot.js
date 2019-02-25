@@ -1,4 +1,5 @@
 const chalk = require('chalk');
+const q = require('q');
 const JusticarIRC = require('../JusticarIRC');
 
 class Bot {
@@ -11,7 +12,12 @@ class Bot {
 		this._client = newClient;
 
 		this._client.addListener('connect', function() {
-			console.log("\n", chalk.bold.green(">>> Justicar is online <<<"), "\n");
+			console.log("\n", chalk.bold.yellow(">>> Justicar is attempting to connect <<<"), "\n");
+		});
+
+		this._client.addListener('registered', function(message) {
+			console.log(chalk.bold.green(">>> Justicar has connected to", message.server, "<<<"), "\n");
+			JusticarIRC.initializeModules();
 		});
 
 		this._client.addListener('message', function(from, to, message) {
@@ -40,7 +46,7 @@ class Bot {
 	}
 
 	processMessageStack(stack, from, to) {
-		let myClient = this.client;
+		let myClient = this._client;
 		stack.messages.forEach(function(stackMessage) {
 			let targetNick = stackMessage.nick || from;
 			let targetChannel = stackMessage.channel || to;
@@ -72,6 +78,32 @@ class Bot {
 		})
 	}
 
+	joinChannel(channelName) {
+		let deferred = q.defer();
+
+		this._client.join(channelName, function() {
+			deferred.resolve();
+		});
+
+		return deferred.promise;
+	}
+
+	createChannel(channel) {
+		let thisBot = this;
+		console.log("Creating channel #", channel.name);
+		this.joinChannel("#" + channel.name).then(
+			function() {
+				thisBot._client.send("topic", "#"+channel.name, channel.description);
+				if (channel.secret) {
+					thisBot._client.send("mode", "#"+channel.name, "+s");
+				}
+			}
+		).catch(
+			function(err) {
+				console.log("ERROR:", err);
+			}
+		)
+	}
 }
 
 module.exports = Bot;

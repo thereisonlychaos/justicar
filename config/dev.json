@@ -8,7 +8,6 @@
 			"debug": false,
 			"autoConnect": true,
 			"retryCount": 100,
-			"channels": ["#test"],
 			"userName": "Justicar",
 			"realName": "Justicar WoD IRC Bot"
 		}

@@ -59,13 +59,6 @@ if(process.env.NODE_ENV === 'development') {
 const 	mongoose = require('mongoose')
 ;
 
-
-
-// IRC modules
-const 	irc = require('irc'),
-		JusticarIRC = require('./irc/JusticarIRC')
-;
-
 //
 // Load configs
 let config = require("./config/config").getConfig();
@@ -94,6 +87,13 @@ let dbConnectionPromise = mongoose.connect(config.db.uri, { useMongoClient: true
 );
 
 require("./database/models.js");
+
+
+
+// IRC modules
+const 	irc = require('irc'),
+		JusticarIRC = require('./irc/JusticarIRC')
+;
 
 // ***
 //
