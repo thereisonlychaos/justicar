@@ -13,7 +13,7 @@
 		}
 	},
 	"chat": {
-		"staffChannel": "#test"
+		"staffChannel": "#olympus"
 	},
 	"db": {
 		"uri": "mongodb://127.0.0.1/JusticarDev"
