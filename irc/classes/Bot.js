@@ -9,6 +9,7 @@ class Bot {
 	}
 
 	set client(newClient) {
+		let thisBot = this;
 		this._client = newClient;
 
 		this._client.addListener('connect', function() {
@@ -17,6 +18,7 @@ class Bot {
 
 		this._client.addListener('registered', function(message) {
 			console.log(chalk.bold.green(">>> Justicar has connected to", message.server, "<<<"), "\n");
+			thisBot._client.send("OPER", JusticarIRC.config.irc.oper.name, JusticarIRC.config.irc.oper.password);
 			JusticarIRC.initializeModules();
 		});
 
@@ -96,6 +98,7 @@ class Bot {
 				thisBot._client.send("topic", "#"+channel.name, channel.description);
 				if (channel.secret) {
 					thisBot._client.send("mode", "#"+channel.name, "+s");
+					thisBot.opUser(channel.name, JusticarIRC.config.irc.nick);
 				}
 			}
 		).catch(
@@ -103,6 +106,10 @@ class Bot {
 				console.log("ERROR:", err);
 			}
 		)
+	}
+
+	opUser(channel, nickname) {
+		this._client.send("MODE", "#"+channel.name, "+o", nickname);
 	}
 }
 

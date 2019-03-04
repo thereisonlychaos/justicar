@@ -10,6 +10,10 @@
 			"retryCount": 100,
 			"userName": "Justicar",
 			"realName": "Justicar WoD IRC Bot"
+		},
+		"oper": {
+			"name": "root",
+			"password": "12345"
 		}
 	},
 	"chat": {

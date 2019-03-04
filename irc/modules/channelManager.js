@@ -11,9 +11,7 @@ channelManager.getChannels = function() {
   let deferred = q.defer();
 
   Channel.find({}, function(err, results) {
-    console.log("finding channels]\n", err, results);
     if (err) {
-
       deferred.reject(err);
     } else {
       deferred.resolve(results);

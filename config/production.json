@@ -11,6 +11,10 @@
 			"userName": "Justicar",
 			"realName": "Justicar WoD IRC Bot",
 			"debug": true
+		},
+		"oper": {
+			"name": "root",
+			"password": "12345"
 		}
 	},
 	"chat": {

@@ -1,5 +1,9 @@
+
 const chalk = require('chalk');
 var Bot = require('./classes/Bot');
+
+// Load configs
+module.exports.config = require("../config/config").getConfig();
 
 let bot = new Bot();
 
