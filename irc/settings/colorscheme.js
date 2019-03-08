@@ -10,4 +10,4 @@ module.exports = {
 	"messageSuccess": "dark_green",
 	"messageFailure": "gray",
 	"messageError": "orange"
-}
+};

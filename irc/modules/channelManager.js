@@ -19,7 +19,7 @@ channelManager.getChannels = function() {
   });
 
   return deferred.promise;
-}
+};
 
 channelManager.setupChannels = function() {
   channelManager.getChannels().then(
@@ -35,10 +35,10 @@ channelManager.setupChannels = function() {
       console.log("ERROR:", err);
     }
   )
-}
+};
 
 channelManager.init = function() {
   channelManager.setupChannels();
-}
+};
 
 module.exports = channelManager;

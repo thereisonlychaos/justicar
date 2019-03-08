@@ -59,7 +59,7 @@ class MessageStack {
 
 	/**
 	* Add message to be sent to the staff channels
-	* @param {string} message - mesage to send to staff
+	* @param {string} message - message to send to staff
 	*/
 	addStaffMessage(message) {
 	 	this._messages.push({

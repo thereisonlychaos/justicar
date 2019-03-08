@@ -48,10 +48,14 @@ function getColoredDicePool(rolls, diff) {
 
 			reply += getColoredDieRoll(value, diff);
 		}
-	)
+	);
 
 	return reply;
 }
+
+
+
+
 
 /*********************************
 * !roll
@@ -71,7 +75,7 @@ rollCommand.addParameter("numberOfDice", "Number", "number of dice", true,
 		}
 	},
 	"4"
-)
+);
 rollCommand.addParameter("difficulty", "Number", "difficulty", true,
 	function(val) {
 		if (val <= 0 || val > 10) {
@@ -81,7 +85,7 @@ rollCommand.addParameter("difficulty", "Number", "difficulty", true,
 		}
 	},
 	"8"
-)
+);
 
 // Add remainder description
 rollCommand.remainderDescription = "reason";
@@ -112,10 +116,13 @@ rollCommand.commandFunction = function(nick, channel, values, remainder) {
 	commandResult.addPublicMessage(replyString, nick, channel);
 
 	return commandResult;
-}
+};
 
 // push into commands array
 module.exports.commands.push(rollCommand);
+
+
+
 
 /*********************************
 * !rpgroll
@@ -133,7 +140,7 @@ rpgrollCommand.addParameter("diceNotation", "String", "dice formula", true,
 	},
 	// example
 	"2d10+5"
-)
+);
 
 // create command function
 rpgrollCommand.commandFunction = function(nick, channel, values, remainder) {
@@ -149,7 +156,7 @@ rpgrollCommand.commandFunction = function(nick, channel, values, remainder) {
 	commandResult.addPublicMessage(replyString, nick, channel);
 
 	return commandResult;
-}
+};
 
 // push into commands array
 module.exports.commands.push(rpgrollCommand);
