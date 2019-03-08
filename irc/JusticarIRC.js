@@ -10,7 +10,8 @@ let bot = new Bot();
 module.exports.bot = bot;
 
 let modules = {
-	"channelManager": require("./modules/channelManager")
+	"channelManager": require("./modules/channelManager"),
+	"logger": require("./modules/logger")
 }
 
 let commandHandlers = {};
@@ -52,8 +53,11 @@ module.exports.isCommandMessage = function(strMessage) {
 		console.log("Non-string message passed into isCommand:", strMessage);
 		return false;
 	}
-}
+};
 
+/**
+ * Handle a command message (starting with !)
+ */
 module.exports.handleCommandMessage = function(from, to, message) {
 	let command = message.split(" ", 1)[0];
 	let messageAfterCommand = message.substring(command.length + 1)
@@ -73,7 +77,7 @@ module.exports.handleCommandMessage = function(from, to, message) {
 				console.log("Error processing command", command, " : ", err);
 			});
 	}
-}
+};
 
 /**
  * Initialize modules

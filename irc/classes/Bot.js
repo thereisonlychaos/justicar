@@ -22,13 +22,6 @@ class Bot {
 			JusticarIRC.initializeModules();
 		});
 
-		this._client.addListener('message', function(from, to, message) {
-			message.trim();
-			if (JusticarIRC.isCommandMessage(message)) {
-				JusticarIRC.handleCommandMessage(from, to, message);
-			}
-		});
-
 		this._client.addListener('error', function(message) {
 			console.log("\n", chalk.bold.red("IRC Error:"), message, "\n");
 		});
