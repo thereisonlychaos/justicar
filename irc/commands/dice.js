@@ -99,7 +99,7 @@ rollCommand.commandFunction = function(nick, channel, values, remainder) {
 
 	if (remainder.length > 0) rollDescription += " [" + remainder + "]";
 
-	rollDescription += ":"
+	rollDescription += ":";
 
 	let replyString = ircColors.bold(irc.colors.wrap(colorScheme.botReply, rollDescription)) + irc.colors.wrap("reset", " ");
 

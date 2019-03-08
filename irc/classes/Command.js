@@ -10,8 +10,7 @@ const ERRORS = {
 	ERR_MISSING_VALUE: 1,
 	ERR_INVALID_VALUE: 2,
 	ERR_INVALID_TYPE: 3
-
-}
+};
 
 /** Class representing a command that can be invoked in the bot */
 class Command {

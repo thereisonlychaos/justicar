@@ -49,10 +49,12 @@ function handleCommandMessage(from, to, message) {
         commandDictionary[command].execute(from, to, messageAfterCommand).then(
             function(stack) {
                 JusticarIRC.bot.processMessageStack(stack, from, to);
-            }).catch(
+            }
+        ).catch(
             function(err) {
                 console.log("Error processing command", command, " : ", err);
-            });
+            }
+        );
     }
 }
 
