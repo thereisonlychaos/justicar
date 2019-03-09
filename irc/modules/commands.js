@@ -67,7 +67,7 @@ module.exports.registerCommands = function registerCommands(name, handler) {
      */
     console.log(chalk.blue("\n== " + name + " Commands =="));
 
-    if (!commandHandler.commands) {
+    if (!handler.commands) {
         console.log(chalk.yellow("WARNING:"), "Command Handler", name, "does not have a command object defined. It will not create any bot commands.")
     } else {
         // load command into dictionary
