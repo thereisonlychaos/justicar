@@ -88,6 +88,7 @@ class Bot {
 		console.log("Creating channel #", channel.name);
 		this.joinChannel("#" + channel.name).then(
 			function() {
+				thisBot._client.send("samode", "#"+channel.name, "+o", thisBot._client.nick);
 				thisBot._client.send("topic", "#"+channel.name, channel.description);
 				if (channel.secret) {
 					thisBot._client.send("mode", "#"+channel.name, "+s");
