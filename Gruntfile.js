@@ -38,7 +38,8 @@ module.exports = function (grunt) {
             target: {
                 script: 'app.js',
                 options: {
-                    ignore: [ "client", "public" ]
+                    ignore: [ "client", "public" ],
+                    args: ["--colors"]
                 }
             },
         },
