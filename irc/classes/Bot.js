@@ -102,6 +102,10 @@ class Bot {
 		)
 	}
 
+	setTopic(channel, topic) {
+      let thisBot = this;
+	}
+
 	opUser(channel, nickname) {
 		this._client.send("MODE", "#"+channel.name, "+o", nickname);
 	}

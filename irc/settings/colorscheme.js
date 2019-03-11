@@ -9,5 +9,6 @@ module.exports = {
 	"messageBotch": "light_red",
 	"messageSuccess": "dark_green",
 	"messageFailure": "gray",
-	"messageError": "orange"
+	"messageError": "orange",
+	"weather": "gray"
 };
