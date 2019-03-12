@@ -9,6 +9,8 @@ const mongoose = require('mongoose');
 const MessageStack = require('../classes/MessageStack');
 
 const JusticarIRC = require('../JusticarIRC');
+const mChannelManager = require("../modules/channelManager");
+
 const Weather = mongoose.model('Weather');
 
 let weatherModule = {};
@@ -58,7 +60,7 @@ function getWeatherQuery() {
  * Current selected weather
  * @type {string}
  */
-weatherModule.currentWeather = c.lightGray("[Weather Not Available]");
+weatherModule.currentWeather = c.lightgray("[Weather Not Available]");
 
 /**
  * Get current weather from database, set with current flag in Weather schema, and then set it as the current weather
@@ -83,13 +85,30 @@ weatherModule.retrieveWeatherFromDb = function() {
 
 /**
  * Set weather variable in module
- * @param summary
- * @param weatherDescription
+ * @param {string} summary
+ * @param {string} weatherDescription
  */
 weatherModule.setWeather = function(summary, weatherDescription) {
     this.currentWeather = c.bold("Weather: " + summary + ".") + " " + c.gray(weatherDescription);
+    console.log(chalk.black.bgWhite("Weather:"), c.stripColorsAndStyle(this.currentWeather));
 
-    // @TODO run weather notifications
+    let messages = new MessageStack();
+
+    mChannelManager.getChannels().then(
+      (channels) => {
+        channels.forEach(
+          (channel) => {
+            messages.addPublicMessage(this.getCurrentWeather(), null, "#" + channel.name);
+          }
+        );
+
+        JusticarIRC.bot.processMessageStack(messages);
+      }
+    ).catch(
+      (err) => {
+        console.error(chalk.red(err));
+      }
+    )
 };
 
 /**
@@ -102,7 +121,7 @@ weatherModule.clearWeather = function() {
        if (err) {
            deferred.reject(err);
        } else {
-           this.currentWeather = c.lightGray("[Weather Not Available]");
+           this.currentWeather = c.lightgray("[Weather Not Available]");
            deferred.resolve();
        }
     });
@@ -151,7 +170,7 @@ weatherModule.getCurrentWeather = function() {
 // @TODO regular job to change weather
 
 weatherModule.init = function() {
-
+  this.retrieveWeatherFromDb();
 };
 
 module.exports = weatherModule;

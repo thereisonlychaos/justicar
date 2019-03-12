@@ -36,6 +36,7 @@ class MessageStack {
 	 	this._messages.push({
 	 		type: "Notice",
 	 		nick: nick,
+			channel: channel,
 	 		message: message
 	 	});
 	}

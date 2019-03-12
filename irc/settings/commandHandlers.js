@@ -1,3 +1,4 @@
 module.exports = {
-    "Dice": require('../commands/dice')
+    "Dice": require('../commands/dice'),
+    "Weather": require('../commands/weather')
 };
