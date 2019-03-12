@@ -5,9 +5,9 @@ const mongoose = require('mongoose');
 const JusticarIRC = require('../JusticarIRC');
 const Channel = mongoose.model('Channel');
 
-let channelManager = {};
+let mChannels = {};
 
-channelManager.getChannels = function() {
+mChannels.getChannels = function() {
   let deferred = q.defer();
 
   Channel.find({}, function(err, results) {
@@ -21,15 +21,15 @@ channelManager.getChannels = function() {
   return deferred.promise;
 };
 
-channelManager.setupChannels = function() {
-  channelManager.getChannels().then(
-    function(channels) {
-      channels.forEach(
-        function(channel) {
-          JusticarIRC.bot.createChannel(channel);
+mChannels.setupChannels = function() {
+    mChannels.getChannels().then(
+        function(channels) {
+          channels.forEach(
+            function(channel) {
+              JusticarIRC.bot.createChannel(channel);
+            }
+          );
         }
-      );
-    }
   ).catch(
     function(err) {
       console.log("ERROR:", err);
@@ -37,8 +37,8 @@ channelManager.setupChannels = function() {
   )
 };
 
-channelManager.init = function() {
-  channelManager.setupChannels();
+mChannels.init = function() {
+    mChannels.setupChannels();
 };
 
-module.exports = channelManager;
+module.exports = mChannels;
