@@ -171,6 +171,16 @@ weatherModule.getCurrentWeather = function() {
 
 weatherModule.init = function() {
   this.retrieveWeatherFromDb();
+
+  JusticarIRC.bot.client.addListener('join', (channel, nick) => {
+    if(nick !== JusticarIRC.bot.client.nick) {
+      messages = new MessageStack();
+
+      messages.addNoticeMessage(this.getCurrentWeather(), nick, channel)
+
+      JusticarIRC.bot.processMessageStack(messages);
+    }
+  });
 };
 
 module.exports = weatherModule;
