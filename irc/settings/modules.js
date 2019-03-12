@@ -1,6 +1,6 @@
 module.exports = {
     "commands": require("../modules/commands"),
-    "channelManager": require("../modules/channelManager"),
+    "channelManager": require("../modules/channels"),
     "logger": require("../modules/logger"),
     "weather": require("../modules/weather")
 };

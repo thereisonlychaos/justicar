@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 const MessageStack = require('../classes/MessageStack');
 
 const JusticarIRC = require('../JusticarIRC');
-const mChannelManager = require("../modules/channelManager");
+const mChannelManager = require("./channels");
 
 const Weather = mongoose.model('Weather');
 
