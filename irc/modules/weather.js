@@ -172,7 +172,9 @@ weatherModule.getCurrentWeather = function() {
 weatherModule.init = function() {
   this.retrieveWeatherFromDb();
 
+  // Listen for joins by anyone but the bot and message them the weather
   JusticarIRC.bot.client.addListener('join', (channel, nick) => {
+    // @TODO check to see if channel is in-character or not 
     if(nick !== JusticarIRC.bot.client.nick) {
       messages = new MessageStack();
 
