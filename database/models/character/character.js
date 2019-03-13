@@ -9,6 +9,6 @@ const CharacterSchema = new mongoose.Schema({
 	realName: { type:String },
 	npc: { type: Boolean, default: false },
 	status: { type: String, enum: ['draft', 'active', 'rejected', 'dead', 'retired']},
-})
+});
 
 mongoose.model("Character", CharacterSchema);

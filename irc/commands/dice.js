@@ -18,8 +18,8 @@ module.exports.commands = [];
 
 /**
 * Creates a colored die roll
-* @param (Number) roll - the result of the roll
-* @param (Number) diff - the difficulty it was rolled against
+* @param {Number} roll - the result of the roll
+* @param {Number} diff - the difficulty it was rolled against
 * @return (String) a IRC formatted string with the proper color wrap
 */
 function getColoredDieRoll(roll, diff) {
