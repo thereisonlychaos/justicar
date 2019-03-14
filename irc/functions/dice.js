@@ -45,14 +45,14 @@ module.exports.rollV20 = function(numberOfDice, difficulty) {
 		rolls: randomJs.dice(10, numberOfDice)(engine),
 		successes: 0,
 		botch: false
-	}
+	};
 
 	let ones = 0;
 	let rawSuccesses = 0;
 
 	// run through the rolls and count ones and successes
 	result.rolls.forEach(function(element) {
-		if (element == 1) {
+		if (element === 1) {
 			ones++;
 		} else if (element >= difficulty || element >= 10) {
 			rawSuccesses++;
@@ -84,7 +84,7 @@ module.exports.rollDice = function(numberOfDice, sides) {
 
 /**
 * Rolls dice based on dice notation (e.g. 2d20+2)
-* @param {string} dice notation
+* @param {string} diceNotation - dice notation
 * @returns {DrollResult}
 */
 module.exports.rollDiceNotation = function(diceNotation) {
