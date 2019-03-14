@@ -13,7 +13,7 @@ const mChannelManager = require("./channels");
 
 const Weather = mongoose.model('Weather');
 
-let mWeather = {};
+let weatherModule = {};
 
 /**
  * Get current season based on northern hemisphere, using the keys in the Weather schema for season (lowercase)
@@ -60,12 +60,12 @@ function getWeatherQuery() {
  * Current selected weather
  * @type {string}
  */
-mWeather.currentWeather = c.lightgray("[Weather Not Available]");
+weatherModule.currentWeather = c.lightgray("[Weather Not Available]");
 
 /**
  * Get current weather from database, set with current flag in Weather schema, and then set it as the current weather
  */
-mWeather.retrieveWeatherFromDb = function() {
+weatherModule.retrieveWeatherFromDb = function() {
     let conditions = getWeatherQuery();
     conditions.current = true;
 
@@ -88,7 +88,7 @@ mWeather.retrieveWeatherFromDb = function() {
  * @param {string} summary
  * @param {string} weatherDescription
  */
-mWeather.setWeather = function(summary, weatherDescription) {
+weatherModule.setWeather = function(summary, weatherDescription) {
     this.currentWeather = c.bold("Weather: " + summary + ".") + " " + c.gray(weatherDescription);
     console.log(chalk.black.bgWhite("Weather:"), c.stripColorsAndStyle(this.currentWeather));
 
@@ -114,7 +114,7 @@ mWeather.setWeather = function(summary, weatherDescription) {
 /**
  * Set all weather current to false
  */
-mWeather.clearWeather = function() {
+weatherModule.clearWeather = function() {
     let deferred = q.defer();
 
     Weather.update({ current: true }, { current: false }, {multi: true}, (err, raw) => {
@@ -132,7 +132,7 @@ mWeather.clearWeather = function() {
 /**
  * Change weather to a random season-appropriate weather description
  */
-mWeather.randomWeatherChange = function() {
+weatherModule.randomWeatherChange = function() {
     Weather.find(getWeatherQuery(), (err, records) => {
         if (records.length > 0) {
             clearWeather().then(
@@ -161,7 +161,7 @@ mWeather.randomWeatherChange = function() {
  * Get current weather string with IRC adornment
  * @returns {string}
  */
-mWeather.getCurrentWeather = function() {
+weatherModule.getCurrentWeather = function() {
     return this.currentWeather;
 };
 
@@ -169,7 +169,7 @@ mWeather.getCurrentWeather = function() {
 
 // @TODO regular job to change weather
 
-mWeather.init = function() {
+weatherModule.init = function() {
   this.retrieveWeatherFromDb();
 
   // Listen for joins by anyone but the bot and message them the weather
@@ -185,4 +185,4 @@ mWeather.init = function() {
   });
 };
 
-module.exports = mWeather;
+module.exports = weatherModule;
