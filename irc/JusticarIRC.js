@@ -1,6 +1,11 @@
 
 const chalk = require('chalk');
+const EventEmitter = require('events');
 var Bot = require('./classes/Bot');
+
+class MyEmitter extends EventEmitter {}
+
+module.exports.events = new MyEmitter();
 
 // Load configs
 module.exports.config = require("../config/config").getConfig();

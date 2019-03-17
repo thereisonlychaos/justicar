@@ -3,6 +3,15 @@ const passport = require('passport');
 const router = require('express').Router();
 const auth = require('../../auth');
 const Record = mongoose.model('Weather');
+const JusticarIRC = require('../../../../irc/JusticarIRC');
+
+function emitDeleteEvent(deletedWeather) {
+  JusticarIRC.events.emit("api_weather_delete", deletedWeather);
+};
+
+function emitUpdateEvent(updatedWeather) {
+  JusticarIRC.events.emit("api_weather_update", updatedWeather);
+};
 
 /**
  * Define controller
@@ -28,6 +37,9 @@ recordCtrl.create = function(req, res, next) {
     (err, saved_record) => {
       if (err)
         res.status(500).json(err);
+
+      emitUpdateEvent(record);
+
       res.status(201).json(saved_record);
     }
   );
@@ -53,6 +65,9 @@ recordCtrl.update = function(req, res, next) {
     (err, record) => {
       if (err)
         res.status(500).json(err);
+
+      emitUpdateEvent(record);
+
       res.status(200).json(record);
     }
   );
@@ -65,6 +80,9 @@ recordCtrl.remove = function(req, res, next) {
     (err) => {
         if (err)
           res.status(500).json(err);
+
+        emitDeleteEvent(record);
+
         res.status(200).json({ message: "record successfully deleted"});
     }
   );
@@ -75,9 +93,11 @@ recordCtrl.makeCurrent = function(req, res, next) {
     (err) => {
       if (err) res.status(500).json(err);
 
-      Record.findOneAndUpdate({ _id: req.params.id }, {current: true}, {},
+      Record.findOneAndUpdate({ _id: req.params.id }, {current: true}, {new : true},
         (err, record) => {
             if (err) res.status(500).json(err);
+
+            emitUpdateEvent(record);
 
             res.status(200).json(record);
         }
