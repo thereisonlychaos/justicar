@@ -168,8 +168,6 @@ mWeather.getCurrentWeather = function() {
 // listener for weather change via API
 JusticarIRC.events.addListener("api_weather_update",
   (updatedWeather) => {
-    console.log(chalk.blue("Received event api_weather_update"));
-    console.log(updatedWeather);
     if(updatedWeather.current) {
       mWeather.setWeather(updatedWeather.summary, updatedWeather.description);
     }
