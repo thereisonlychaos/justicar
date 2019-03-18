@@ -16,7 +16,7 @@ function log(from, to, text, type) {
   record.save(
     (err, saved_record) => {
       if (err) console.error("Error saving log:", saved_record);
-      console.log("log:", saved_record);
+      console.log(chalk.gray("[", type, "]", from, "->", to, ":", text));
     }
   )
 }
