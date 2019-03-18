@@ -1,6 +1,12 @@
 const q = require('q');
 const chalk = require('chalk');
 const c = require('irc-colors');
+const schedule = require('node-schedule');
+
+const randomJs = require('random-js');
+const engine = randomJs.engines.mt19937();
+engine.autoSeed();
+
 
 const colorScheme = require('../settings/colorscheme');
 
@@ -135,14 +141,14 @@ mWeather.clearWeather = function() {
 mWeather.randomWeatherChange = function() {
     Weather.find(getWeatherQuery(), (err, records) => {
         if (records.length > 0) {
-            clearWeather().then(
+            mWeather.clearWeather().then(
                 (result) => {
                     let randomSkip = Math.floor(records.length * Math.random());
 
                     records[randomSkip].current = true;
                     records[randomSkip].save(
                         (err, record) => {
-                            this.setWeather(record.summary, record.description);
+                            mWeather.setWeather(record.summary, record.description);
                         }
                     );
                 }
@@ -152,7 +158,7 @@ mWeather.randomWeatherChange = function() {
                 }
             )
         } else {
-            this.clearWeather();
+            mWeather.clearWeather();
         }
     });
 };
@@ -175,7 +181,25 @@ JusticarIRC.events.addListener("api_weather_update",
 );
 
 // regular job to change weather
+let weatherChangeJob = schedule.scheduleJob('2,12,28,48 * * * *', ()=> {
+  /**
+   * Odds of the weather changing, 1 in X
+   */
+  let oddsOfChange = 28;
 
+  /**
+   * Generate boolean
+   */
+  let bChangeWeather = randomJs.bool(1, oddsOfChange)(engine);
+  if(bChangeWeather) {
+    console.log(chalk.blue("Changing weather at random..."));
+    mWeather.randomWeatherChange();
+  };
+});
+
+/**
+ * Initialize module
+ */
 mWeather.init = function() {
   this.retrieveWeatherFromDb();
 
